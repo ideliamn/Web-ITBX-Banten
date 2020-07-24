@@ -40,6 +40,8 @@
 .filterselect select {
     display: block;
     width: 100%;
+    /* biar si filter select ngga mojok ke kiri */
+    margin-left: 10px;
 }
 
 .filterselect p {

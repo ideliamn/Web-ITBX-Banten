@@ -142,6 +142,8 @@
 	}
 .leaflet-left {
 	left: 0;
+	/* biar si leaflet ini gak mojok ke kiri */
+	margin-left: 10px;
 	}
 .leaflet-control {
 	float: left;
