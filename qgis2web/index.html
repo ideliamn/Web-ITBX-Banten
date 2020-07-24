@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="css/leaflet.css">
+  <link rel="stylesheet" href="css/qgis2web.css">
+  <link rel="stylesheet" href="css/fontawesome-all.min.css">
+  <link rel="stylesheet" href="css/leaflet-search.css">
+  <link rel="stylesheet" href="css/filter.css">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+  <!-- Bootstrap ends -->
+  </script>
+  <link rel="stylesheet" href="css/nouislider.min.css">
+  <style>
+    #map {
+      /* width: 1619px; */
+      /* height: 827px; */
+      width: 1310px;
+      height: 800px;
+      /* margin-left: 30px; */
+      margin-top: 30px;
+      background-color: paleturquoise;
+    }
+  </style>
+  <title>Peta | Web ITBX Banten</title>
+</head>
+
+<body style="background-color: pink; margin-top: 30px; margin-left: 30px;">
+  <h1>ceritanya mau navbar disini</h1>
+  <div id="map">
+    <h2>ini peta</h2>
+  </div>
+  <script src="js/qgis2web_expressions.js"></script>
+  <script src="js/leaflet.js"></script>
+  <script src="js/leaflet.rotatedMarker.js"></script>
+  <script src="js/leaflet.pattern.js"></script>
+  <script src="js/leaflet-hash.js"></script>
+  <script src="js/Autolinker.min.js"></script>
+  <script src="js/rbush.min.js"></script>
+  <script src="js/labelgun.min.js"></script>
+  <script src="js/labels.js"></script>
+  <script src="js/leaflet-search.js"></script>
+  <script src="js/tailDT.js"></script>
+  <script src="js/nouislider.min.js"></script>
+  <script src="js/wNumb.js"></script>
+  <script src="data/Baru_0.js"></script>
+  <script src="data/barukedua_1.js"></script>
+  <script>
+    var map = L.map('map', {
+      zoomControl: true,
+      maxZoom: 20,
+      // minZoom: 1
+      minZoom: 10
+    }).fitBounds([
+      [-5.900211476179535, 103.60041224335727],
+      [-1.3110722949324858, 112.5951250386015]
+    ]);
+    var hash = new L.Hash(map);
+    map.attributionControl.setPrefix(
+      '<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>'
+    );
+    var autolinker = new Autolinker({
+      truncate: {
+        length: 30,
+        location: 'smart'
+      }
+    });
+    var bounds_group = new L.featureGroup([]);
+
+    function setBounds() {}
+
+    function pop_Baru_0(feature, layer) {
+      var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">luas</th>\
+                        <td>' + (feature.properties['luas'] !== null ? autolinker.link(feature.properties['luas']
+        .toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">pddk</th>\
+                        <td>' + (feature.properties['pddk'] !== null ? autolinker.link(feature.properties['pddk']
+        .toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">kepadatan</th>\
+                        <td>' + (feature.properties['kepadatan'] !== null ? autolinker.link(feature.properties[
+        'kepadatan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">luas_ha</th>\
+                        <td>' + (feature.properties['luas_ha'] !== null ? autolinker.link(feature.properties['luas_ha']
+        .toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">luas_citra</th>\
+                        <td>' + (feature.properties['luas_citra'] !== null ? autolinker.link(feature.properties[
+        'luas_citra'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kecamatan</th>\
+                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(feature.properties[
+        'Kecamatan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kab_Kota</th>\
+                        <td>' + (feature.properties['Kab_Kota'] !== null ? autolinker.link(feature.properties[
+        'Kab_Kota'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kel_Desa</th>\
+                        <td>' + (feature.properties['Kel_Desa'] !== null ? autolinker.link(feature.properties[
+        'Kel_Desa'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Pemerintah</th>\
+                        <td>' + (feature.properties['Pemerintah'] !== null ? autolinker.link(feature.properties[
+        'Pemerintah'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WKP</th>\
+                        <td>' + (feature.properties['WKP'] !== null ? autolinker.link(feature.properties['WKP']
+        .toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+      layer.bindPopup(popupContent, {
+        maxHeight: 400
+      });
+    }
+
+    function style_Baru_0_0() {
+      return {
+        pane: 'pane_Baru_0',
+        opacity: 1,
+        color: 'rgba(103,69,69,0.8431372549019608)',
+        dashArray: '',
+        lineCap: 'butt',
+        lineJoin: 'miter',
+        weight: 1.0,
+        fill: true,
+        fillOpacity: 1,
+        fillColor: 'rgba(255,255,255,1.0)',
+        interactive: true,
+      }
+    }
+    map.createPane('pane_Baru_0');
+    map.getPane('pane_Baru_0').style.zIndex = 400;
+    map.getPane('pane_Baru_0').style['mix-blend-mode'] = 'normal';
+    var layer_Baru_0 = new L.geoJson(json_Baru_0, {
+      attribution: '',
+      interactive: true,
+      dataVar: 'json_Baru_0',
+      layerName: 'layer_Baru_0',
+      pane: 'pane_Baru_0',
+      onEachFeature: pop_Baru_0,
+      style: style_Baru_0_0,
+    });
+    bounds_group.addLayer(layer_Baru_0);
+    map.addLayer(layer_Baru_0);
+
+    function pop_barukedua_1(feature, layer) {
+      var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">POLA_RUANG</th>\
+                        <td>' + (feature.properties['POLA_RUANG'] !== null ? autolinker.link(feature.properties[
+        'POLA_RUANG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Luas_Citra</th>\
+                        <td>' + (feature.properties['Luas_Citra'] !== null ? autolinker.link(feature.properties[
+        'Luas_Citra'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ijin</th>\
+                        <td>' + (feature.properties['Ijin'] !== null ? autolinker.link(feature.properties['Ijin']
+        .toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Terbatas</th>\
+                        <td>' + (feature.properties['Terbatas'] !== null ? autolinker.link(feature.properties[
+        'Terbatas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+      layer.bindPopup(popupContent, {
+        maxHeight: 400
+      });
+    }
+
+    function style_barukedua_1_0() {
+      return {
+        pane: 'pane_barukedua_1',
+        opacity: 1,
+        color: 'rgba(35,35,35,1.0)',
+        dashArray: '',
+        lineCap: 'butt',
+        lineJoin: 'miter',
+        weight: 1.0,
+        fill: true,
+        fillOpacity: 1,
+        fillColor: 'rgba(164,113,88,1.0)',
+        interactive: true,
+      }
+    }
+    map.createPane('pane_barukedua_1');
+    map.getPane('pane_barukedua_1').style.zIndex = 401;
+    map.getPane('pane_barukedua_1').style['mix-blend-mode'] = 'normal';
+    var layer_barukedua_1 = new L.geoJson(json_barukedua_1, {
+      attribution: '',
+      interactive: true,
+      dataVar: 'json_barukedua_1',
+      layerName: 'layer_barukedua_1',
+      pane: 'pane_barukedua_1',
+      onEachFeature: pop_barukedua_1,
+      style: style_barukedua_1_0,
+    });
+    bounds_group.addLayer(layer_barukedua_1);
+    map.addLayer(layer_barukedua_1);
+    var baseMaps = {};
+    L.control.layers(baseMaps, {
+      // '<img src="legend/barukedua_1.png" /> baru kedua': layer_barukedua_1,
+      // '<img src="legend/Baru_0.png" /> Baru': layer_Baru_0,
+      '<img src="legend/barukedua_1.png" /> Kawasan Industri': layer_barukedua_1,
+      '<img src="legend/Baru_0.png" /> Kawasan Administratif': layer_Baru_0,
+    }).addTo(map);
+    setBounds();
+    map.addControl(new L.Control.Search({
+      layer: layer_Baru_0,
+      initial: false,
+      hideMarkerOnCollapse: true,
+      propertyName: 'Kel_Desa'
+    }));
+    document.getElementsByClassName('search-button')[0].className +=
+      ' fa fa-binoculars';
+    var mapDiv = document.getElementById('map');
+    var row = document.createElement('div');
+    row.className = "row";
+    row.id = "all";
+    row.style.height = "100%";
+    var col1 = document.createElement('div');
+    col1.className = "col9";
+    col1.id = "mapWindow";
+    col1.style.height = "99%";
+    col1.style.width = "80%";
+    // col1.style.display = "inline-block";
+    var col2 = document.createElement('div');
+    col2.className = "col3";
+    col2.id = "menu";
+    col2.style.display = "inline-block";
+    mapDiv.parentNode.insertBefore(row, mapDiv);
+    document.getElementById("all").appendChild(col1);
+    document.getElementById("all").appendChild(col2);
+    col1.appendChild(mapDiv)
+    var Filters = {
+      "Kel_Desa": "str"
+    };
+
+    function filterFunc() {
+      map.eachLayer(function (lyr) {
+        if ("options" in lyr && "dataVar" in lyr["options"]) {
+          features = this[lyr["options"]["dataVar"]].features.slice(0);
+          try {
+            for (key in Filters) {
+              keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+              if (Filters[key] == "str" || Filters[key] == "bool") {
+                var selection = [];
+                var options = document.getElementById("sel_" + keyS).options
+                for (var i = 0; i < options.length; i++) {
+                  if (options[i].selected) selection.push(options[i].value);
+                }
+                try {
+                  if (key in features[0].properties) {
+                    for (i = features.length - 1; i >= 0; --i) {
+                      if (selection.indexOf(
+                          features[i].properties[key]) < 0 &&
+                        selection.length > 0) {
+                        features.splice(i, 1);
+                      }
+                    }
+                  }
+                } catch (err) {}
+              }
+              if (Filters[key] == "int") {
+                sliderVals = document.getElementById(
+                  "div_" + keyS).noUiSlider.get();
+                try {
+                  if (key in features[0].properties) {
+                    for (i = features.length - 1; i >= 0; --i) {
+                      if (parseInt(features[i].properties[key]) <
+                        sliderVals[0] ||
+                        parseInt(features[i].properties[key]) >
+                        sliderVals[1]) {
+                        features.splice(i, 1);
+                      }
+                    }
+                  }
+                } catch (err) {}
+              }
+              if (Filters[key] == "real") {
+                sliderVals = document.getElementById(
+                  "div_" + keyS).noUiSlider.get();
+                try {
+                  if (key in features[0].properties) {
+                    for (i = features.length - 1; i >= 0; --i) {
+                      if (features[i].properties[key] <
+                        sliderVals[0] ||
+                        features[i].properties[key] >
+                        sliderVals[1]) {
+                        features.splice(i, 1);
+                      }
+                    }
+                  }
+                } catch (err) {}
+              }
+              if (Filters[key] == "date" ||
+                Filters[key] == "datetime" ||
+                Filters[key] == "time") {
+                try {
+                  if (key in features[0].properties) {
+                    HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                    startdate = document.getElementById("dat_" +
+                      HTMLkey + "_date1").value.replace(" ", "T");
+                    enddate = document.getElementById("dat_" +
+                      HTMLkey + "_date2").value.replace(" ", "T");
+                    for (i = features.length - 1; i >= 0; --i) {
+                      if (features[i].properties[key] < startdate ||
+                        features[i].properties[key] > enddate) {
+                        features.splice(i, 1);
+                      }
+                    }
+                  }
+                } catch (err) {}
+              }
+            }
+          } catch (err) {}
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        }
+      })
+    }
+    document.getElementById("menu").appendChild(
+      document.createElement("div"));
+    var div_Kel_Desa = document.createElement('div');
+    div_Kel_Desa.id = "div_Kel_Desa";
+    div_Kel_Desa.className = "filterselect";
+    document.getElementById("menu").appendChild(div_Kel_Desa);
+    sel_Kel_Desa = document.createElement('select');
+    sel_Kel_Desa.multiple = true;
+    sel_Kel_Desa.size = 15;
+    sel_Kel_Desa.id = "sel_Kel_Desa";
+    var Kel_Desa_options_str = "<option value='' unselected></option>";
+    sel_Kel_Desa.onchange = function () {
+      filterFunc()
+    };
+    Kel_Desa_options_str += '<option value="Alam Jaya">Alam Jaya</option>';
+    Kel_Desa_options_str += '<option value="Alang Alang">Alang Alang</option>';
+    Kel_Desa_options_str += '<option value="Alaswangi">Alaswangi</option>';
+    Kel_Desa_options_str += '<option value="Ancol Pasir">Ancol Pasir</option>';
+    Kel_Desa_options_str += '<option value="Anggalan">Anggalan</option>';
+    Kel_Desa_options_str += '<option value="Angsana">Angsana</option>';
+    Kel_Desa_options_str += '<option value="Anyar">Anyar</option>';
+    Kel_Desa_options_str += '<option value="Argawana">Argawana</option>';
+    Kel_Desa_options_str += '<option value="Asem">Asem</option>';
+    Kel_Desa_options_str += '<option value="Asem Margaluyu">Asem Margaluyu</option>';
+    Kel_Desa_options_str += '<option value="Aweh">Aweh</option>';
+    Kel_Desa_options_str += '<option value="Awilega">Awilega</option>';
+    Kel_Desa_options_str += '<option value="Babadsari">Babadsari</option>';
+    Kel_Desa_options_str += '<option value="Babakan">Babakan</option>';
+    Kel_Desa_options_str += '<option value="Babakan Asem">Babakan Asem</option>';
+    Kel_Desa_options_str += '<option value="Babakan Jaya">Babakan Jaya</option>';
+    Kel_Desa_options_str += '<option value="Babakan Kalanganyar">Babakan Kalanganyar</option>';
+    Kel_Desa_options_str += '<option value="Babakankeusik">Babakankeusik</option>';
+    Kel_Desa_options_str += '<option value="Babakanlor">Babakanlor</option>';
+    Kel_Desa_options_str += '<option value="Babat">Babat</option>';
+    Kel_Desa_options_str += '<option value="Badak Anom">Badak Anom</option>';
+    Kel_Desa_options_str += '<option value="Badur">Badur</option>';
+    Kel_Desa_options_str += '<option value="Bagendung">Bagendung</option>';
+    Kel_Desa_options_str += '<option value="Bakti Jaya">Bakti Jaya</option>';
+    Kel_Desa_options_str += '<option value="Bakung">Bakung</option>';
+    Kel_Desa_options_str += '<option value="Balaraja">Balaraja</option>';
+    Kel_Desa_options_str += '<option value="Balekambang">Balekambang</option>';
+    Kel_Desa_options_str += '<option value="Bama">Bama</option>';
+    Kel_Desa_options_str += '<option value="Bambu Apus">Bambu Apus</option>';
+    Kel_Desa_options_str += '<option value="Bandulu+">Bandulu+</option>';
+    Kel_Desa_options_str += '<option value="Bandung">Bandung</option>';
+    Kel_Desa_options_str += '<option value="Bangkonol">Bangkonol</option>';
+    Kel_Desa_options_str += '<option value="Bangkuyung">Bangkuyung</option>';
+    Kel_Desa_options_str += '<option value="Banjar">Banjar</option>';
+    Kel_Desa_options_str += '<option value="Banjar Irigasi">Banjar Irigasi</option>';
+    Kel_Desa_options_str += '<option value="Banjar Negara">Banjar Negara</option>';
+    Kel_Desa_options_str += '<option value="Banjaragung">Banjaragung</option>';
+    Kel_Desa_options_str += '<option value="Banjarmasin">Banjarmasin</option>';
+    Kel_Desa_options_str += '<option value="Banjarnegara">Banjarnegara</option>';
+    Kel_Desa_options_str += '<option value="Banjarsari">Banjarsari</option>';
+    Kel_Desa_options_str += '<option value="Banjarwangi">Banjarwangi</option>';
+    Kel_Desa_options_str += '<option value="Bantar Panjang">Bantar Panjang</option>';
+    Kel_Desa_options_str += '<option value="Bantarwangi">Bantarwangi</option>';
+    Kel_Desa_options_str += '<option value="Bantarwaru">Bantarwaru</option>';
+    Kel_Desa_options_str += '<option value="Banten">Banten</option>';
+    Kel_Desa_options_str += '<option value="Banyu Asih">Banyu Asih</option>';
+    Kel_Desa_options_str += '<option value="Banyuasih">Banyuasih</option>';
+    Kel_Desa_options_str += '<option value="Banyubiru">Banyubiru</option>';
+    Kel_Desa_options_str += '<option value="Banyumas">Banyumas</option>';
+    Kel_Desa_options_str += '<option value="Banyumekar">Banyumekar</option>';
+    Kel_Desa_options_str += '<option value="Banyuresmi">Banyuresmi</option>';
+    Kel_Desa_options_str += '<option value="Banyuwangi">Banyuwangi</option>';
+    Kel_Desa_options_str += '<option value="Barengkok">Barengkok</option>';
+    Kel_Desa_options_str += '<option value="Baros">Baros</option>';
+    Kel_Desa_options_str += '<option value="Barugbug">Barugbug</option>';
+    Kel_Desa_options_str += '<option value="Barunai">Barunai</option>';
+    Kel_Desa_options_str += '<option value="Batubantar">Batubantar</option>';
+    Kel_Desa_options_str += '<option value="Batuceper">Batuceper</option>';
+    Kel_Desa_options_str += '<option value="Batuhideung">Batuhideung</option>';
+    Kel_Desa_options_str += '<option value="Batujaya">Batujaya</option>';
+    Kel_Desa_options_str += '<option value="Batukuda">Batukuda</option>';
+    Kel_Desa_options_str += '<option value="Batukuwung">Batukuwung</option>';
+    Kel_Desa_options_str += '<option value="Baturanjang">Baturanjang</option>';
+    Kel_Desa_options_str += '<option value="Batusari">Batusari</option>';
+    Kel_Desa_options_str += '<option value="Bayah Barat">Bayah Barat</option>';
+    Kel_Desa_options_str += '<option value="Bayah Timur">Bayah Timur</option>';
+    Kel_Desa_options_str += '<option value="Bayumundu">Bayumundu</option>';
+    Kel_Desa_options_str += '<option value="Beberan">Beberan</option>';
+    Kel_Desa_options_str += '<option value="Bejod">Bejod</option>';
+    Kel_Desa_options_str += '<option value="Belendung">Belendung</option>';
+    Kel_Desa_options_str += '<option value="Belimbing">Belimbing</option>';
+    Kel_Desa_options_str += '<option value="Bencongan">Bencongan</option>';
+    Kel_Desa_options_str += '<option value="Bencongan Indah">Bencongan Indah</option>';
+    Kel_Desa_options_str += '<option value="Benda">Benda</option>';
+    Kel_Desa_options_str += '<option value="Benda Baru">Benda Baru</option>';
+    Kel_Desa_options_str += '<option value="Bendung">Bendung</option>';
+    Kel_Desa_options_str += '<option value="Bendungan">Bendungan</option>';
+    Kel_Desa_options_str += '<option value="Binangun">Binangun</option>';
+    Kel_Desa_options_str += '<option value="Binong">Binong</option>';
+    Kel_Desa_options_str += '<option value="Binong+">Binong+</option>';
+    Kel_Desa_options_str += '<option value="Bintangresmi">Bintangresmi</option>';
+    Kel_Desa_options_str += '<option value="Bintangsari">Bintangsari</option>';
+    Kel_Desa_options_str += '<option value="Binuang">Binuang</option>';
+    Kel_Desa_options_str += '<option value="Bitung Jaya">Bitung Jaya</option>';
+    Kel_Desa_options_str += '<option value="Blokang">Blokang</option>';
+    Kel_Desa_options_str += '<option value="Blukbuk">Blukbuk</option>';
+    Kel_Desa_options_str += '<option value="Bojen">Bojen</option>';
+    Kel_Desa_options_str += '<option value="Bojonegara">Bojonegara</option>';
+    Kel_Desa_options_str += '<option value="Bojong">Bojong</option>';
+    Kel_Desa_options_str += '<option value="Bojong Catang">Bojong Catang</option>';
+    Kel_Desa_options_str += '<option value="Bojong Kamal">Bojong Kamal</option>';
+    Kel_Desa_options_str += '<option value="Bojong Menteng">Bojong Menteng</option>';
+    Kel_Desa_options_str += '<option value="Bojong Nangka">Bojong Nangka</option>';
+    Kel_Desa_options_str += '<option value="Bojong Pandan">Bojong Pandan</option>';
+    Kel_Desa_options_str += '<option value="Bojong Renged">Bojong Renged</option>';
+    Kel_Desa_options_str += '<option value="Bojongcae">Bojongcae</option>';
+    Kel_Desa_options_str += '<option value="Bojongjaya">Bojongjaya</option>';
+    Kel_Desa_options_str += '<option value="Bojongjuruh">Bojongjuruh</option>';
+    Kel_Desa_options_str += '<option value="Bojongkoneng">Bojongkoneng</option>';
+    Kel_Desa_options_str += '<option value="Bojongleles">Bojongleles</option>';
+    Kel_Desa_options_str += '<option value="Bojongloa">Bojongloa</option>';
+    Kel_Desa_options_str += '<option value="Bojongmanik">Bojongmanik</option>';
+    Kel_Desa_options_str += '<option value="Bojot">Bojot</option>';
+    Kel_Desa_options_str += '<option value="Bolang">Bolang</option>';
+    Kel_Desa_options_str += '<option value="Buaran">Buaran</option>';
+    Kel_Desa_options_str += '<option value="Buaran Bambu">Buaran Bambu</option>';
+    Kel_Desa_options_str += '<option value="Buaran Indah">Buaran Indah</option>';
+    Kel_Desa_options_str += '<option value="Buaran Jati">Buaran Jati</option>';
+    Kel_Desa_options_str += '<option value="Buaran Mangga">Buaran Mangga</option>';
+    Kel_Desa_options_str += '<option value="Budi Mulya">Budi Mulya</option>';
+    Kel_Desa_options_str += '<option value="Bugel">Bugel</option>';
+    Kel_Desa_options_str += '<option value="Bulagor">Bulagor</option>';
+    Kel_Desa_options_str += '<option value="Bulakan">Bulakan</option>';
+    Kel_Desa_options_str += '<option value="Bumijaya">Bumijaya</option>';
+    Kel_Desa_options_str += '<option value="Bunar">Bunar</option>';
+    Kel_Desa_options_str += '<option value="Bunder">Bunder</option>';
+    Kel_Desa_options_str += '<option value="Bungur Mekar">Bungur Mekar</option>';
+    Kel_Desa_options_str += '<option value="Bungurcopong">Bungurcopong</option>';
+    Kel_Desa_options_str += '<option value="Buni Ayu">Buni Ayu</option>';
+    Kel_Desa_options_str += '<option value="Bunihara">Bunihara</option>';
+    Kel_Desa_options_str += '<option value="Bunisari">Bunisari</option>';
+    Kel_Desa_options_str += '<option value="Buyut Mekar">Buyut Mekar</option>';
+    Kel_Desa_options_str += '<option value="Cadasari">Cadasari</option>';
+    Kel_Desa_options_str += '<option value="Cahayamekar">Cahayamekar</option>';
+    Kel_Desa_options_str += '<option value="Cakung">Cakung</option>';
+    Kel_Desa_options_str += '<option value="Calungbungur">Calungbungur</option>';
+    Kel_Desa_options_str += '<option value="Campaka">Campaka</option>';
+    Kel_Desa_options_str += '<option value="Campakawarna">Campakawarna</option>';
+    Kel_Desa_options_str += '<option value="Candi">Candi</option>';
+    Kel_Desa_options_str += '<option value="Cangkudu">Cangkudu</option>';
+    Kel_Desa_options_str += '<option value="Carenang">Carenang</option>';
+    Kel_Desa_options_str += '<option value="Carenang Udik">Carenang Udik</option>';
+    Kel_Desa_options_str += '<option value="Caringin">Caringin</option>';
+    Kel_Desa_options_str += '<option value="Carita">Carita</option>';
+    Kel_Desa_options_str += '<option value="Cempaka">Cempaka</option>';
+    Kel_Desa_options_str += '<option value="Cempaka Putih">Cempaka Putih</option>';
+    Kel_Desa_options_str += '<option value="Cemplang">Cemplang</option>';
+    Kel_Desa_options_str += '<option value="Cengklong">Cengklong</option>';
+    Kel_Desa_options_str += '<option value="Cening">Cening</option>';
+    Kel_Desa_options_str += '<option value="Cerukcuk">Cerukcuk</option>';
+    Kel_Desa_options_str += '<option value="Ciagel">Ciagel</option>';
+    Kel_Desa_options_str += '<option value="Ciakar">Ciakar</option>';
+    Kel_Desa_options_str += '<option value="Ciandur">Ciandur</option>';
+    Kel_Desa_options_str += '<option value="Ciangir">Ciangir</option>';
+    Kel_Desa_options_str += '<option value="Ciapus">Ciapus</option>';
+    Kel_Desa_options_str += '<option value="Ciater">Ciater</option>';
+    Kel_Desa_options_str += '<option value="Ciawi">Ciawi</option>';
+    Kel_Desa_options_str += '<option value="Cibadak">Cibadak</option>';
+    Kel_Desa_options_str += '<option value="Cibaliung">Cibaliung</option>';
+    Kel_Desa_options_str += '<option value="Cibarani">Cibarani</option>';
+    Kel_Desa_options_str += '<option value="Cibarengkok">Cibarengkok</option>';
+    Kel_Desa_options_str += '<option value="Cibareno">Cibareno</option>';
+    Kel_Desa_options_str += '<option value="Cibaturkeusik">Cibaturkeusik</option>';
+    Kel_Desa_options_str += '<option value="Cibeber">Cibeber</option>';
+    Kel_Desa_options_str += '<option value="Cibetok">Cibetok</option>';
+    Kel_Desa_options_str += '<option value="Cibeureum">Cibeureum</option>';
+    Kel_Desa_options_str += '<option value="Cibingbin">Cibingbin</option>';
+    Kel_Desa_options_str += '<option value="Cibitung">Cibitung</option>';
+    Kel_Desa_options_str += '<option value="Cibodas">Cibodas</option>';
+    Kel_Desa_options_str += '<option value="Cibodas Baru">Cibodas Baru</option>';
+    Kel_Desa_options_str += '<option value="Cibodasari">Cibodasari</option>';
+    Kel_Desa_options_str += '<option value="Cibogo">Cibogo</option>';
+    Kel_Desa_options_str += '<option value="Cibojong">Cibojong</option>';
+    Kel_Desa_options_str += '<option value="Cibuah">Cibuah</option>';
+    Kel_Desa_options_str += '<option value="Cibugel">Cibugel</option>';
+    Kel_Desa_options_str += '<option value="Cibungur">Cibungur</option>';
+    Kel_Desa_options_str += '<option value="Ciburial">Ciburial</option>';
+    Kel_Desa_options_str += '<option value="Ciburuy">Ciburuy</option>';
+    Kel_Desa_options_str += '<option value="Cicalengka">Cicalengka</option>';
+    Kel_Desa_options_str += '<option value="Cicaringin">Cicaringin</option>';
+    Kel_Desa_options_str += '<option value="Cidadap">Cidadap</option>';
+    Kel_Desa_options_str += '<option value="Cidahu">Cidahu</option>';
+    Kel_Desa_options_str += '<option value="Cidikit">Cidikit</option>';
+    Kel_Desa_options_str += '<option value="Cigadung">Cigadung</option>';
+    Kel_Desa_options_str += '<option value="Cigandeng">Cigandeng</option>';
+    Kel_Desa_options_str += '<option value="Cigelam">Cigelam</option>';
+    Kel_Desa_options_str += '<option value="Cigemblong">Cigemblong</option>';
+    Kel_Desa_options_str += '<option value="Cigeulis">Cigeulis</option>';
+    Kel_Desa_options_str += '<option value="Ciginggang">Ciginggang</option>';
+    Kel_Desa_options_str += '<option value="Cigondang">Cigondang</option>';
+    Kel_Desa_options_str += '<option value="Cigoong">Cigoong</option>';
+    Kel_Desa_options_str += '<option value="Cigoong Selatan">Cigoong Selatan</option>';
+    Kel_Desa_options_str += '<option value="Cigoong Utara">Cigoong Utara</option>';
+    Kel_Desa_options_str += '<option value="Cigorondong">Cigorondong</option>';
+    Kel_Desa_options_str += '<option value="Cihambali">Cihambali</option>';
+    Kel_Desa_options_str += '<option value="Cihanjuang">Cihanjuang</option>';
+    Kel_Desa_options_str += '<option value="Cihara">Cihara</option>';
+    Kel_Desa_options_str += '<option value="Ciherang">Ciherang</option>';
+    Kel_Desa_options_str += '<option value="Ciherangjaya">Ciherangjaya</option>';
+    Kel_Desa_options_str += '<option value="Cihujan">Cihujan</option>';
+    Kel_Desa_options_str += '<option value="Cihuni">Cihuni</option>';
+    Kel_Desa_options_str += '<option value="Ciinjuk">Ciinjuk</option>';
+    Kel_Desa_options_str += '<option value="Cijakan">Cijakan</option>';
+    Kel_Desa_options_str += '<option value="Cijaku">Cijaku</option>';
+    Kel_Desa_options_str += '<option value="Cijantra">Cijantra</option>';
+    Kel_Desa_options_str += '<option value="Cijaralang">Cijaralang</option>';
+    Kel_Desa_options_str += '<option value="Cijengkol">Cijengkol</option>';
+    Kel_Desa_options_str += '<option value="Cijeruk">Cijeruk</option>';
+    Kel_Desa_options_str += '<option value="Cijoro Lebak">Cijoro Lebak</option>';
+    Kel_Desa_options_str += '<option value="Cijoro Pasir">Cijoro Pasir</option>';
+    Kel_Desa_options_str += '<option value="Cikadongdong">Cikadongdong</option>';
+    Kel_Desa_options_str += '<option value="Cikadu">Cikadu</option>';
+    Kel_Desa_options_str += '<option value="Cikadueun">Cikadueun</option>';
+    Kel_Desa_options_str += '<option value="Cikalong">Cikalong</option>';
+    Kel_Desa_options_str += '<option value="Cikamunding">Cikamunding</option>';
+    Kel_Desa_options_str += '<option value="Cikande">Cikande</option>';
+    Kel_Desa_options_str += '<option value="Cikarang">Cikarang</option>';
+    Kel_Desa_options_str += '<option value="Cikaratuan">Cikaratuan</option>';
+    Kel_Desa_options_str += '<option value="Cikareo">Cikareo</option>';
+    Kel_Desa_options_str += '<option value="Cikaret">Cikaret</option>';
+    Kel_Desa_options_str += '<option value="Cikasungka">Cikasungka</option>';
+    Kel_Desa_options_str += '<option value="Cikatapis">Cikatapis</option>';
+    Kel_Desa_options_str += '<option value="Cikate">Cikate</option>';
+    Kel_Desa_options_str += '<option value="Cikatomas">Cikatomas</option>';
+    Kel_Desa_options_str += '<option value="Cikayas">Cikayas</option>';
+    Kel_Desa_options_str += '<option value="Cikedung">Cikedung</option>';
+    Kel_Desa_options_str += '<option value="Cikentrung">Cikentrung</option>';
+    Kel_Desa_options_str += '<option value="Cikerai">Cikerai</option>';
+    Kel_Desa_options_str += '<option value="Cikeusal">Cikeusal</option>';
+    Kel_Desa_options_str += '<option value="Cikeusik">Cikeusik</option>';
+    Kel_Desa_options_str += '<option value="Cikiruh">Cikiruh</option>';
+    Kel_Desa_options_str += '<option value="Cikiruhwetan">Cikiruhwetan</option>';
+    Kel_Desa_options_str += '<option value="Cikokol">Cikokol</option>';
+    Kel_Desa_options_str += '<option value="Cikolelet">Cikolelet</option>';
+    Kel_Desa_options_str += '<option value="Cikoneng">Cikoneng</option>';
+    Kel_Desa_options_str += '<option value="Cikotok">Cikotok</option>';
+    Kel_Desa_options_str += '<option value="Cikulur">Cikulur</option>';
+    Kel_Desa_options_str += '<option value="Cikumbueun">Cikumbueun</option>';
+    Kel_Desa_options_str += '<option value="Cikupa">Cikupa</option>';
+    Kel_Desa_options_str += '<option value="Cikuya">Cikuya</option>';
+    Kel_Desa_options_str += '<option value="Cilabanbulan">Cilabanbulan</option>';
+    Kel_Desa_options_str += '<option value="Ciladaeun">Ciladaeun</option>';
+    Kel_Desa_options_str += '<option value="Cilaja">Cilaja</option>';
+    Kel_Desa_options_str += '<option value="Cilaku">Cilaku</option>';
+    Kel_Desa_options_str += '<option value="Cilangkahan">Cilangkahan</option>';
+    Kel_Desa_options_str += '<option value="Cilangkap">Cilangkap</option>';
+    Kel_Desa_options_str += '<option value="Cilayang">Cilayang</option>';
+    Kel_Desa_options_str += '<option value="Cilayang+">Cilayang+</option>';
+    Kel_Desa_options_str += '<option value="Cilegong Ilir">Cilegong Ilir</option>';
+    Kel_Desa_options_str += '<option value="Cileles">Cileles</option>';
+    Kel_Desa_options_str += '<option value="Cilenggang">Cilenggang</option>';
+    Kel_Desa_options_str += '<option value="Cilentung">Cilentung</option>';
+    Kel_Desa_options_str += '<option value="Cililitan">Cililitan</option>';
+    Kel_Desa_options_str += '<option value="Cilograng">Cilograng</option>';
+    Kel_Desa_options_str += '<option value="Cilowong+">Cilowong+</option>';
+    Kel_Desa_options_str += '<option value="Cimancak">Cimancak</option>';
+    Kel_Desa_options_str += '<option value="Cimandiri">Cimandiri</option>';
+    Kel_Desa_options_str += '<option value="Cimangeungteung">Cimangeungteung</option>';
+    Kel_Desa_options_str += '<option value="Cimanggu">Cimanggu</option>';
+    Kel_Desa_options_str += '<option value="Cimanis">Cimanis</option>';
+    Kel_Desa_options_str += '<option value="Cimanuk">Cimanuk</option>';
+    Kel_Desa_options_str += '<option value="Cimanyangray">Cimanyangray</option>';
+    Kel_Desa_options_str += '<option value="Cimarga">Cimarga</option>';
+    Kel_Desa_options_str += '<option value="Cimaung">Cimaung</option>';
+    Kel_Desa_options_str += '<option value="Cimayang">Cimayang</option>';
+    Kel_Desa_options_str += '<option value="Cimenga">Cimenga</option>';
+    Kel_Desa_options_str += '<option value="Cimenteng Jaya">Cimenteng Jaya</option>';
+    Kel_Desa_options_str += '<option value="Ciminyak">Ciminyak</option>';
+    Kel_Desa_options_str += '<option value="Cimone">Cimone</option>';
+    Kel_Desa_options_str += '<option value="Cimone Jaya">Cimone Jaya</option>';
+    Kel_Desa_options_str += '<option value="Cimoyan">Cimoyan</option>';
+    Kel_Desa_options_str += '<option value="Cimuncang">Cimuncang</option>';
+    Kel_Desa_options_str += '<option value="Cinangka">Cinangka</option>';
+    Kel_Desa_options_str += '<option value="Cinoyong">Cinoyong</option>';
+    Kel_Desa_options_str += '<option value="Ciodeng">Ciodeng</option>';
+    Kel_Desa_options_str += '<option value="Ciomas">Ciomas</option>';
+    Kel_Desa_options_str += '<option value="Cipadang">Cipadang</option>';
+    Kel_Desa_options_str += '<option value="Cipadu">Cipadu</option>';
+    Kel_Desa_options_str += '<option value="Cipadu Jaya">Cipadu Jaya</option>';
+    Kel_Desa_options_str += '<option value="Cipaeh">Cipaeh</option>';
+    Kel_Desa_options_str += '<option value="Cipalabuh">Cipalabuh</option>';
+    Kel_Desa_options_str += '<option value="Cipanas">Cipanas</option>';
+    Kel_Desa_options_str += '<option value="Ciparahu">Ciparahu</option>';
+    Kel_Desa_options_str += '<option value="Ciparasi">Ciparasi</option>';
+    Kel_Desa_options_str += '<option value="Cipare">Cipare</option>';
+    Kel_Desa_options_str += '<option value="Cipayung">Cipayung</option>';
+    Kel_Desa_options_str += '<option value="Cipedang">Cipedang</option>';
+    Kel_Desa_options_str += '<option value="Cipete">Cipete</option>';
+    Kel_Desa_options_str += '<option value="Cipeucang">Cipeucang</option>';
+    Kel_Desa_options_str += '<option value="Cipeundeuy">Cipeundeuy</option>';
+    Kel_Desa_options_str += '<option value="Cipicung">Cipicung</option>';
+    Kel_Desa_options_str += '<option value="Cipinang">Cipinang</option>';
+    Kel_Desa_options_str += '<option value="Cipining">Cipining</option>';
+    Kel_Desa_options_str += '<option value="Cipocok Jaya">Cipocok Jaya</option>';
+    Kel_Desa_options_str += '<option value="Cipondoh">Cipondoh</option>';
+    Kel_Desa_options_str += '<option value="Cipondoh Indah">Cipondoh Indah</option>';
+    Kel_Desa_options_str += '<option value="Cipondoh Makmur">Cipondoh Makmur</option>';
+    Kel_Desa_options_str += '<option value="Ciputat">Ciputat</option>';
+    Kel_Desa_options_str += '<option value="Ciputri">Ciputri</option>';
+    Kel_Desa_options_str += '<option value="Cirangkong">Cirangkong</option>';
+    Kel_Desa_options_str += '<option value="Cirarab">Cirarab</option>';
+    Kel_Desa_options_str += '<option value="Cireundeu">Cireundeu</option>';
+    Kel_Desa_options_str += '<option value="Cirinten">Cirinten</option>';
+    Kel_Desa_options_str += '<option value="Cirompang">Cirompang</option>';
+    Kel_Desa_options_str += '<option value="Ciruas">Ciruas</option>';
+    Kel_Desa_options_str += '<option value="Ciruji">Ciruji</option>';
+    Kel_Desa_options_str += '<option value="Cirumpak">Cirumpak</option>';
+    Kel_Desa_options_str += '<option value="Cisaat">Cisaat</option>';
+    Kel_Desa_options_str += '<option value="Cisait">Cisait</option>';
+    Kel_Desa_options_str += '<option value="Cisalam">Cisalam</option>';
+    Kel_Desa_options_str += '<option value="Cisampang">Cisampang</option>';
+    Kel_Desa_options_str += '<option value="Cisampih">Cisampih</option>';
+    Kel_Desa_options_str += '<option value="Cisangu">Cisangu</option>';
+    Kel_Desa_options_str += '<option value="Cisarap">Cisarap</option>';
+    Kel_Desa_options_str += '<option value="Cisauk">Cisauk</option>';
+    Kel_Desa_options_str += '<option value="Cisereh">Cisereh</option>';
+    Kel_Desa_options_str += '<option value="Ciseureuheun">Ciseureuheun</option>';
+    Kel_Desa_options_str += '<option value="Cisimeut">Cisimeut</option>';
+    Kel_Desa_options_str += '<option value="Cisimeut Raya">Cisimeut Raya</option>';
+    Kel_Desa_options_str += '<option value="Cisitu">Cisitu</option>';
+    Kel_Desa_options_str += '<option value="Cisoka">Cisoka</option>';
+    Kel_Desa_options_str += '<option value="Cisungsang">Cisungsang</option>';
+    Kel_Desa_options_str += '<option value="Cisuren">Cisuren</option>';
+    Kel_Desa_options_str += '<option value="Citalahab">Citalahab</option>';
+    Kel_Desa_options_str += '<option value="Citaman">Citaman</option>';
+    Kel_Desa_options_str += '<option value="Citangkil">Citangkil</option>';
+    Kel_Desa_options_str += '<option value="Citasuk">Citasuk</option>';
+    Kel_Desa_options_str += '<option value="Citeluk">Citeluk</option>';
+    Kel_Desa_options_str += '<option value="Citepuseun">Citepuseun</option>';
+    Kel_Desa_options_str += '<option value="Citeras">Citeras</option>';
+    Kel_Desa_options_str += '<option value="Citerep">Citerep</option>';
+    Kel_Desa_options_str += '<option value="Citeureup">Citeureup</option>';
+    Kel_Desa_options_str += '<option value="Citorek Barat">Citorek Barat</option>';
+    Kel_Desa_options_str += '<option value="Citorek Kidul">Citorek Kidul</option>';
+    Kel_Desa_options_str += '<option value="Citorek Sabrang">Citorek Sabrang</option>';
+    Kel_Desa_options_str += '<option value="Citorek Tengah">Citorek Tengah</option>';
+    Kel_Desa_options_str += '<option value="Citorek Timur">Citorek Timur</option>';
+    Kel_Desa_options_str += '<option value="Citumenggung">Citumenggung</option>';
+    Kel_Desa_options_str += '<option value="Ciuyah">Ciuyah</option>';
+    Kel_Desa_options_str += '<option value="Ciwaduk">Ciwaduk</option>';
+    Kel_Desa_options_str += '<option value="Ciwarna">Ciwarna</option>';
+    Kel_Desa_options_str += '<option value="Ciwedus">Ciwedus</option>';
+    Kel_Desa_options_str += '<option value="Cokopsulanjana">Cokopsulanjana</option>';
+    Kel_Desa_options_str += '<option value="Cukang Galih">Cukang Galih</option>';
+    Kel_Desa_options_str += '<option value="Curug">Curug</option>';
+    Kel_Desa_options_str += '<option value="Curug Agung">Curug Agung</option>';
+    Kel_Desa_options_str += '<option value="Curug Badak">Curug Badak</option>';
+    Kel_Desa_options_str += '<option value="Curug Goong">Curug Goong</option>';
+    Kel_Desa_options_str += '<option value="Curug Kulon">Curug Kulon</option>';
+    Kel_Desa_options_str += '<option value="Curug Sangereng">Curug Sangereng</option>';
+    Kel_Desa_options_str += '<option value="Curug Sulanjana">Curug Sulanjana</option>';
+    Kel_Desa_options_str += '<option value="Curug Wetan">Curug Wetan</option>';
+    Kel_Desa_options_str += '<option value="Curugbarang">Curugbarang</option>';
+    Kel_Desa_options_str += '<option value="Curugbitung">Curugbitung</option>';
+    Kel_Desa_options_str += '<option value="Curugciung">Curugciung</option>';
+    Kel_Desa_options_str += '<option value="Curuglanglang">Curuglanglang</option>';
+    Kel_Desa_options_str += '<option value="Curuglemo">Curuglemo</option>';
+    Kel_Desa_options_str += '<option value="Curugmanis">Curugmanis</option>';
+    Kel_Desa_options_str += '<option value="Curugpanjang">Curugpanjang</option>';
+    Kel_Desa_options_str += '<option value="Dadap">Dadap</option>';
+    Kel_Desa_options_str += '<option value="Dahu">Dahu</option>';
+    Kel_Desa_options_str += '<option value="Dalembalar">Dalembalar</option>';
+    Kel_Desa_options_str += '<option value="Dalung">Dalung</option>';
+    Kel_Desa_options_str += '<option value="Damping">Damping</option>';
+    Kel_Desa_options_str += '<option value="Dang Deur">Dang Deur</option>';
+    Kel_Desa_options_str += '<option value="Dangdang">Dangdang</option>';
+    Kel_Desa_options_str += '<option value="Daon">Daon</option>';
+    Kel_Desa_options_str += '<option value="Darmasari">Darmasari</option>';
+    Kel_Desa_options_str += '<option value="Daroyon">Daroyon</option>';
+    Kel_Desa_options_str += '<option value="Daru">Daru</option>';
+    Kel_Desa_options_str += '<option value="Datarcae">Datarcae</option>';
+    Kel_Desa_options_str += '<option value="Deringo">Deringo</option>';
+    Kel_Desa_options_str += '<option value="Domas">Domas</option>';
+    Kel_Desa_options_str += '<option value="Drangong">Drangong</option>';
+    Kel_Desa_options_str += '<option value="Dukuh">Dukuh</option>';
+    Kel_Desa_options_str += '<option value="Gabus">Gabus</option>';
+    Kel_Desa_options_str += '<option value="Gaga">Gaga</option>';
+    Kel_Desa_options_str += '<option value="Ganda Ria">Ganda Ria</option>';
+    Kel_Desa_options_str += '<option value="Gandasari">Gandasari</option>';
+    Kel_Desa_options_str += '<option value="Gandayasa">Gandayasa</option>';
+    Kel_Desa_options_str += '<option value="Garut">Garut</option>';
+    Kel_Desa_options_str += '<option value="Gebang Raya">Gebang Raya</option>';
+    Kel_Desa_options_str += '<option value="Gedong Dalem">Gedong Dalem</option>';
+    Kel_Desa_options_str += '<option value="Gelam">Gelam</option>';
+    Kel_Desa_options_str += '<option value="Gelam Jaya">Gelam Jaya</option>';
+    Kel_Desa_options_str += '<option value="Gembong">Gembong</option>';
+    Kel_Desa_options_str += '<option value="Gembor">Gembor</option>';
+    Kel_Desa_options_str += '<option value="Gembor Udik">Gembor Udik</option>';
+    Kel_Desa_options_str += '<option value="Gempol Sari">Gempol Sari</option>';
+    Kel_Desa_options_str += '<option value="Geredug">Geredug</option>';
+    Kel_Desa_options_str += '<option value="Gerem">Gerem</option>';
+    Kel_Desa_options_str += '<option value="Gerendeng">Gerendeng</option>';
+    Kel_Desa_options_str += '<option value="Gerendong">Gerendong</option>';
+    Kel_Desa_options_str += '<option value="Gerogol">Gerogol</option>';
+    Kel_Desa_options_str += '<option value="Gintung">Gintung</option>';
+    Kel_Desa_options_str += '<option value="Giri Jagabaya">Giri Jagabaya</option>';
+    Kel_Desa_options_str += '<option value="Giriharja">Giriharja</option>';
+    Kel_Desa_options_str += '<option value="Girijaya">Girijaya</option>';
+    Kel_Desa_options_str += '<option value="Girilaya">Girilaya</option>';
+    Kel_Desa_options_str += '<option value="Girimukti">Girimukti</option>';
+    Kel_Desa_options_str += '<option value="Giripawana">Giripawana</option>';
+    Kel_Desa_options_str += '<option value="Gombong">Gombong</option>';
+    Kel_Desa_options_str += '<option value="Gondrong">Gondrong</option>';
+    Kel_Desa_options_str += '<option value="Gosara">Gosara</option>';
+    Kel_Desa_options_str += '<option value="Gubugancibeureum">Gubugancibeureum</option>';
+    Kel_Desa_options_str += '<option value="Gumuruh">Gumuruh</option>';
+    Kel_Desa_options_str += '<option value="Gunung Anten">Gunung Anten</option>';
+    Kel_Desa_options_str += '<option value="Gunung Gede">Gunung Gede</option>';
+    Kel_Desa_options_str += '<option value="Gunung Kaler">Gunung Kaler</option>';
+    Kel_Desa_options_str += '<option value="Gunung Kencana">Gunung Kencana</option>';
+    Kel_Desa_options_str += '<option value="Gunung Kendeng">Gunung Kendeng</option>';
+    Kel_Desa_options_str += '<option value="Gunung Sari">Gunung Sari</option>';
+    Kel_Desa_options_str += '<option value="Gunung Wangun">Gunung Wangun</option>';
+    Kel_Desa_options_str += '<option value="Gunungbatu">Gunungbatu</option>';
+    Kel_Desa_options_str += '<option value="Gunungcupu">Gunungcupu</option>';
+    Kel_Desa_options_str += '<option value="Gunungdatar">Gunungdatar</option>';
+    Kel_Desa_options_str += '<option value="Gunungputri">Gunungputri</option>';
+    Kel_Desa_options_str += '<option value="Gunungsari">Gunungsari</option>';
+    Kel_Desa_options_str += '<option value="Gunungsugih">Gunungsugih</option>';
+    Kel_Desa_options_str += '<option value="Guradog">Guradog</option>';
+    Kel_Desa_options_str += '<option value="Harapankarya">Harapankarya</option>';
+    Kel_Desa_options_str += '<option value="Hariang">Hariang</option>';
+    Kel_Desa_options_str += '<option value="Harjatani">Harjatani</option>';
+    Kel_Desa_options_str += '<option value="Harjawana">Harjawana</option>';
+    Kel_Desa_options_str += '<option value="Harumsari">Harumsari</option>';
+    Kel_Desa_options_str += '<option value="Harundang">Harundang</option>';
+    Kel_Desa_options_str += '<option value="Haurgajrug">Haurgajrug</option>';
+    Kel_Desa_options_str += '<option value="Hegarmanah">Hegarmanah</option>';
+    Kel_Desa_options_str += '<option value="Idaman">Idaman</option>';
+    Kel_Desa_options_str += '<option value="Inten Jaya">Inten Jaya</option>';
+    Kel_Desa_options_str += '<option value="Jagabaya">Jagabaya</option>';
+    Kel_Desa_options_str += '<option value="Jagaraksa">Jagaraksa</option>';
+    Kel_Desa_options_str += '<option value="Jalupang Girang">Jalupang Girang</option>';
+    Kel_Desa_options_str += '<option value="Jalupang Mulya">Jalupang Mulya</option>';
+    Kel_Desa_options_str += '<option value="Jambe">Jambe</option>';
+    Kel_Desa_options_str += '<option value="Jambu Karya">Jambu Karya</option>';
+    Kel_Desa_options_str += '<option value="Janaka">Janaka</option>';
+    Kel_Desa_options_str += '<option value="Jatake">Jatake</option>';
+    Kel_Desa_options_str += '<option value="Jati Mulya">Jati Mulya</option>';
+    Kel_Desa_options_str += '<option value="Jati Waringin">Jati Waringin</option>';
+    Kel_Desa_options_str += '<option value="Jatimulya">Jatimulya</option>';
+    Kel_Desa_options_str += '<option value="Jatiuwung">Jatiuwung</option>';
+    Kel_Desa_options_str += '<option value="Jawilan">Jawilan</option>';
+    Kel_Desa_options_str += '<option value="Jayamanik">Jayamanik</option>';
+    Kel_Desa_options_str += '<option value="Jayamekar">Jayamekar</option>';
+    Kel_Desa_options_str += '<option value="Jayanti">Jayanti</option>';
+    Kel_Desa_options_str += '<option value="Jayapura">Jayapura</option>';
+    Kel_Desa_options_str += '<option value="Jayasari">Jayasari</option>';
+    Kel_Desa_options_str += '<option value="Jelupang">Jelupang</option>';
+    Kel_Desa_options_str += '<option value="Jenggot">Jenggot</option>';
+    Kel_Desa_options_str += '<option value="Jengkol">Jengkol</option>';
+    Kel_Desa_options_str += '<option value="Jeruktipis">Jeruktipis</option>';
+    Kel_Desa_options_str += '<option value="Jeung Jing">Jeung Jing</option>';
+    Kel_Desa_options_str += '<option value="Jiput">Jiput</option>';
+    Kel_Desa_options_str += '<option value="Jombang">Jombang</option>';
+    Kel_Desa_options_str += '<option value="Jombang Wetan">Jombang Wetan</option>';
+    Kel_Desa_options_str += '<option value="Juhut">Juhut</option>';
+    Kel_Desa_options_str += '<option value="Julang">Julang</option>';
+    Kel_Desa_options_str += '<option value="Junti">Junti</option>';
+    Kel_Desa_options_str += '<option value="Jurang Manggu Barat">Jurang Manggu Barat</option>';
+    Kel_Desa_options_str += '<option value="Jurang Manggu Timur">Jurang Manggu Timur</option>';
+    Kel_Desa_options_str += '<option value="Jurumudi">Jurumudi</option>';
+    Kel_Desa_options_str += '<option value="Jurumudi Baru">Jurumudi Baru</option>';
+    Kel_Desa_options_str += '<option value="Kabayan">Kabayan</option>';
+    Kel_Desa_options_str += '<option value="Kademangan">Kademangan</option>';
+    Kel_Desa_options_str += '<option value="Kadikaran">Kadikaran</option>';
+    Kel_Desa_options_str += '<option value="Kadomas">Kadomas</option>';
+    Kel_Desa_options_str += '<option value="Kadu">Kadu</option>';
+    Kel_Desa_options_str += '<option value="Kadu Agung">Kadu Agung</option>';
+    Kel_Desa_options_str += '<option value="Kadu Jaya">Kadu Jaya</option>';
+    Kel_Desa_options_str += '<option value="Kadu Sirung">Kadu Sirung</option>';
+    Kel_Desa_options_str += '<option value="Kaduagung Barat">Kaduagung Barat</option>';
+    Kel_Desa_options_str += '<option value="Kaduagung Tengah">Kaduagung Tengah</option>';
+    Kel_Desa_options_str += '<option value="Kaduagung Timur">Kaduagung Timur</option>';
+    Kel_Desa_options_str += '<option value="Kadubadak">Kadubadak</option>';
+    Kel_Desa_options_str += '<option value="Kadubale">Kadubale</option>';
+    Kel_Desa_options_str += '<option value="Kadubelang">Kadubelang</option>';
+    Kel_Desa_options_str += '<option value="Kadubera">Kadubera</option>';
+    Kel_Desa_options_str += '<option value="Kadubeureum">Kadubeureum</option>';
+    Kel_Desa_options_str += '<option value="Kadubungbang">Kadubungbang</option>';
+    Kel_Desa_options_str += '<option value="Kadudamas">Kadudamas</option>';
+    Kel_Desa_options_str += '<option value="Kadudampit">Kadudampit</option>';
+    Kel_Desa_options_str += '<option value="Kadudodol">Kadudodol</option>';
+    Kel_Desa_options_str += '<option value="Kaduela">Kaduela</option>';
+    Kel_Desa_options_str += '<option value="Kaduengang">Kaduengang</option>';
+    Kel_Desa_options_str += '<option value="Kadugadung">Kadugadung</option>';
+    Kel_Desa_options_str += '<option value="Kadugemblo">Kadugemblo</option>';
+    Kel_Desa_options_str += '<option value="Kadugenep+">Kadugenep+</option>';
+    Kel_Desa_options_str += '<option value="Kaduhauk">Kaduhauk</option>';
+    Kel_Desa_options_str += '<option value="Kaduhejo">Kaduhejo</option>';
+    Kel_Desa_options_str += '<option value="Kadujajar">Kadujajar</option>';
+    Kel_Desa_options_str += '<option value="Kadujangkung">Kadujangkung</option>';
+    Kel_Desa_options_str += '<option value="Kadukempong">Kadukempong</option>';
+    Kel_Desa_options_str += '<option value="Kadulimus">Kadulimus</option>';
+    Kel_Desa_options_str += '<option value="Kadumadang">Kadumadang</option>';
+    Kel_Desa_options_str += '<option value="Kadumalati">Kadumalati</option>';
+    Kel_Desa_options_str += '<option value="Kadumaneuh">Kadumaneuh</option>';
+    Kel_Desa_options_str += '<option value="Kadumerak">Kadumerak</option>';
+    Kel_Desa_options_str += '<option value="Kadupandak">Kadupandak</option>';
+    Kel_Desa_options_str += '<option value="Kadupayung">Kadupayung</option>';
+    Kel_Desa_options_str += '<option value="Kadurahayu">Kadurahayu</option>';
+    Kel_Desa_options_str += '<option value="Kaduronyok">Kaduronyok</option>';
+    Kel_Desa_options_str += '<option value="Kagungan">Kagungan</option>';
+    Kel_Desa_options_str += '<option value="Kalang Anyar">Kalang Anyar</option>';
+    Kel_Desa_options_str += '<option value="Kalanganyar">Kalanganyar</option>';
+    Kel_Desa_options_str += '<option value="Kalanggunung">Kalanggunung</option>';
+    Kel_Desa_options_str += '<option value="Kalapian">Kalapian</option>';
+    Kel_Desa_options_str += '<option value="Kali Asin">Kali Asin</option>';
+    Kel_Desa_options_str += '<option value="Kalibaru">Kalibaru</option>';
+    Kel_Desa_options_str += '<option value="Kaligandu">Kaligandu</option>';
+    Kel_Desa_options_str += '<option value="Kalitimbang">Kalitimbang</option>';
+    Kel_Desa_options_str += '<option value="Kalodran">Kalodran</option>';
+    Kel_Desa_options_str += '<option value="Kalumpang">Kalumpang</option>';
+    Kel_Desa_options_str += '<option value="Kamanisan">Kamanisan</option>';
+    Kel_Desa_options_str += '<option value="Kamaruton">Kamaruton</option>';
+    Kel_Desa_options_str += '<option value="Kamasan">Kamasan</option>';
+    Kel_Desa_options_str += '<option value="Kampung Baru">Kampung Baru</option>';
+    Kel_Desa_options_str += '<option value="Kampung Besar">Kampung Besar</option>';
+    Kel_Desa_options_str += '<option value="Kampung Kelor">Kampung Kelor</option>';
+    Kel_Desa_options_str += '<option value="Kampung Melayu Barat">Kampung Melayu Barat</option>';
+    Kel_Desa_options_str += '<option value="Kampung Melayu Timur">Kampung Melayu Timur</option>';
+    Kel_Desa_options_str += '<option value="Kamuning">Kamuning</option>';
+    Kel_Desa_options_str += '<option value="Kamurang">Kamurang</option>';
+    Kel_Desa_options_str += '<option value="Kananga">Kananga</option>';
+    Kel_Desa_options_str += '<option value="Kanda Wati">Kanda Wati</option>';
+    Kel_Desa_options_str += '<option value="Kandangsapi">Kandangsapi</option>';
+    Kel_Desa_options_str += '<option value="Kanekes">Kanekes</option>';
+    Kel_Desa_options_str += '<option value="Kapunduhan">Kapunduhan</option>';
+    Kel_Desa_options_str += '<option value="Karang Anyar">Karang Anyar</option>';
+    Kel_Desa_options_str += '<option value="Karang Mulya">Karang Mulya</option>';
+    Kel_Desa_options_str += '<option value="Karang Pamindangan">Karang Pamindangan</option>';
+    Kel_Desa_options_str += '<option value="Karang Sari">Karang Sari</option>';
+    Kel_Desa_options_str += '<option value="Karang Serang">Karang Serang</option>';
+    Kel_Desa_options_str += '<option value="Karang Suraga">Karang Suraga</option>';
+    Kel_Desa_options_str += '<option value="Karang Tengah">Karang Tengah</option>';
+    Kel_Desa_options_str += '<option value="Karang Timur">Karang Timur</option>';
+    Kel_Desa_options_str += '<option value="Karangasem">Karangasem</option>';
+    Kel_Desa_options_str += '<option value="Karangbolong">Karangbolong</option>';
+    Kel_Desa_options_str += '<option value="Karangharja">Karangharja</option>';
+    Kel_Desa_options_str += '<option value="Karangkamulyan">Karangkamulyan</option>';
+    Kel_Desa_options_str += '<option value="Karangkepuh">Karangkepuh</option>';
+    Kel_Desa_options_str += '<option value="Karangnunggal">Karangnunggal</option>';
+    Kel_Desa_options_str += '<option value="Karangsari">Karangsari</option>';
+    Kel_Desa_options_str += '<option value="Karangsetra">Karangsetra</option>';
+    Kel_Desa_options_str += '<option value="Karaton">Karaton</option>';
+    Kel_Desa_options_str += '<option value="Karawaci">Karawaci</option>';
+    Kel_Desa_options_str += '<option value="Karawaci Baru">Karawaci Baru</option>';
+    Kel_Desa_options_str += '<option value="Kareo">Kareo</option>';
+    Kel_Desa_options_str += '<option value="Karet">Karet</option>';
+    Kel_Desa_options_str += '<option value="Karoya">Karoya</option>';
+    Kel_Desa_options_str += '<option value="Kartasana">Kartasana</option>';
+    Kel_Desa_options_str += '<option value="Karundang">Karundang</option>';
+    Kel_Desa_options_str += '<option value="Karya Jaya">Karya Jaya</option>';
+    Kel_Desa_options_str += '<option value="Karyabuana">Karyabuana</option>';
+    Kel_Desa_options_str += '<option value="Karyasari">Karyasari</option>';
+    Kel_Desa_options_str += '<option value="Karyautama">Karyautama</option>';
+    Kel_Desa_options_str += '<option value="Karyawangi">Karyawangi</option>';
+    Kel_Desa_options_str += '<option value="Kasemen">Kasemen</option>';
+    Kel_Desa_options_str += '<option value="Kasunyatan">Kasunyatan</option>';
+    Kel_Desa_options_str += '<option value="Katulisan">Katulisan</option>';
+    Kel_Desa_options_str += '<option value="Katumbiri">Katumbiri</option>';
+    Kel_Desa_options_str += '<option value="Kaungcaang">Kaungcaang</option>';
+    Kel_Desa_options_str += '<option value="Kawoyang">Kawoyang</option>';
+    Kel_Desa_options_str += '<option value="Kayu Agung">Kayu Agung</option>';
+    Kel_Desa_options_str += '<option value="Kayu Bongkok">Kayu Bongkok</option>';
+    Kel_Desa_options_str += '<option value="Kebon">Kebon</option>';
+    Kel_Desa_options_str += '<option value="Kebon Besar">Kebon Besar</option>';
+    Kel_Desa_options_str += '<option value="Kebon Cau">Kebon Cau</option>';
+    Kel_Desa_options_str += '<option value="Keboncau">Keboncau</option>';
+    Kel_Desa_options_str += '<option value="Kebondalem">Kebondalem</option>';
+    Kel_Desa_options_str += '<option value="Kebonratu">Kebonratu</option>';
+    Kel_Desa_options_str += '<option value="Kebonsari">Kebonsari</option>';
+    Kel_Desa_options_str += '<option value="Kebuyutan">Kebuyutan</option>';
+    Kel_Desa_options_str += '<option value="Kedaleman">Kedaleman</option>';
+    Kel_Desa_options_str += '<option value="Kedaung">Kedaung</option>';
+    Kel_Desa_options_str += '<option value="Kedaung Barat">Kedaung Barat</option>';
+    Kel_Desa_options_str += '<option value="Kedaung Baru">Kedaung Baru</option>';
+    Kel_Desa_options_str += '<option value="Kedaung Wetan">Kedaung Wetan</option>';
+    Kel_Desa_options_str += '<option value="Kedung">Kedung</option>';
+    Kel_Desa_options_str += '<option value="Kedung Dalem">Kedung Dalem</option>';
+    Kel_Desa_options_str += '<option value="Kedung Soka">Kedung Soka</option>';
+    Kel_Desa_options_str += '<option value="Kelapa Dua">Kelapa Dua</option>';
+    Kel_Desa_options_str += '<option value="Kelapa Indah">Kelapa Indah</option>';
+    Kel_Desa_options_str += '<option value="Kelebet">Kelebet</option>';
+    Kel_Desa_options_str += '<option value="Kemanisan">Kemanisan</option>';
+    Kel_Desa_options_str += '<option value="Kemiri">Kemiri</option>';
+    Kel_Desa_options_str += '<option value="Kemuning">Kemuning</option>';
+    Kel_Desa_options_str += '<option value="Kenanga">Kenanga</option>';
+    Kel_Desa_options_str += '<option value="Kencana Harapan">Kencana Harapan</option>';
+    Kel_Desa_options_str += '<option value="Kendayakan">Kendayakan</option>';
+    Kel_Desa_options_str += '<option value="Kepandean">Kepandean</option>';
+    Kel_Desa_options_str += '<option value="Kepuh">Kepuh</option>';
+    Kel_Desa_options_str += '<option value="Kepuren">Kepuren</option>';
+    Kel_Desa_options_str += '<option value="Keramatjaya">Keramatjaya</option>';
+    Kel_Desa_options_str += '<option value="Kereo">Kereo</option>';
+    Kel_Desa_options_str += '<option value="Kereo Selatan">Kereo Selatan</option>';
+    Kel_Desa_options_str += '<option value="Kersaratu">Kersaratu</option>';
+    Kel_Desa_options_str += '<option value="Kerta">Kerta</option>';
+    Kel_Desa_options_str += '<option value="Kertajaya">Kertajaya</option>';
+    Kel_Desa_options_str += '<option value="Kertamukti">Kertamukti</option>';
+    Kel_Desa_options_str += '<option value="Kertaraharja">Kertaraharja</option>';
+    Kel_Desa_options_str += '<option value="Kertarahayu">Kertarahayu</option>';
+    Kel_Desa_options_str += '<option value="Kertasana">Kertasana</option>';
+    Kel_Desa_options_str += '<option value="Keserangan">Keserangan</option>';
+    Kel_Desa_options_str += '<option value="Ketapang">Ketapang</option>';
+    Kel_Desa_options_str += '<option value="Ketileng">Ketileng</option>';
+    Kel_Desa_options_str += '<option value="Ketos">Ketos</option>';
+    Kel_Desa_options_str += '<option value="Keusik">Keusik</option>';
+    Kel_Desa_options_str += '<option value="Kiara">Kiara</option>';
+    Kel_Desa_options_str += '<option value="Kiarajangkung">Kiarajangkung</option>';
+    Kel_Desa_options_str += '<option value="Kiarapayung">Kiarapayung</option>';
+    Kel_Desa_options_str += '<option value="Kibin">Kibin</option>';
+    Kel_Desa_options_str += '<option value="Kilasah">Kilasah</option>';
+    Kel_Desa_options_str += '<option value="Klutuk">Klutuk</option>';
+    Kel_Desa_options_str += '<option value="Koangjaya">Koangjaya</option>';
+    Kel_Desa_options_str += '<option value="Kohod">Kohod</option>';
+    Kel_Desa_options_str += '<option value="Kolelet">Kolelet</option>';
+    Kel_Desa_options_str += '<option value="Kolelet Wetan">Kolelet Wetan</option>';
+    Kel_Desa_options_str += '<option value="Koncang">Koncang</option>';
+    Kel_Desa_options_str += '<option value="Kondangjaya">Kondangjaya</option>';
+    Kel_Desa_options_str += '<option value="Koper">Koper</option>';
+    Kel_Desa_options_str += '<option value="Kopo">Kopo</option>';
+    Kel_Desa_options_str += '<option value="Koranji">Koranji</option>';
+    Kel_Desa_options_str += '<option value="Koroncong">Koroncong</option>';
+    Kel_Desa_options_str += '<option value="Kosambi">Kosambi</option>';
+    Kel_Desa_options_str += '<option value="Kosambi Barat">Kosambi Barat</option>';
+    Kel_Desa_options_str += '<option value="Kosambi Dalam">Kosambi Dalam</option>';
+    Kel_Desa_options_str += '<option value="Kosambi Ronyok+">Kosambi Ronyok+</option>';
+    Kel_Desa_options_str += '<option value="Kosambi Timur">Kosambi Timur</option>';
+    Kel_Desa_options_str += '<option value="Kotabaru">Kotabaru</option>';
+    Kel_Desa_options_str += '<option value="Kotabumi">Kotabumi</option>';
+    Kel_Desa_options_str += '<option value="Kotadukuh">Kotadukuh</option>';
+    Kel_Desa_options_str += '<option value="Kotasari">Kotasari</option>';
+    Kel_Desa_options_str += '<option value="Kragilan">Kragilan</option>';
+    Kel_Desa_options_str += '<option value="Kramat">Kramat</option>';
+    Kel_Desa_options_str += '<option value="Kramatjati">Kramatjati</option>';
+    Kel_Desa_options_str += '<option value="Kramatjaya">Kramatjaya</option>';
+    Kel_Desa_options_str += '<option value="Kramatlaban">Kramatlaban</option>';
+    Kel_Desa_options_str += '<option value="Kramatmanik">Kramatmanik</option>';
+    Kel_Desa_options_str += '<option value="Kramatwatu">Kramatwatu</option>';
+    Kel_Desa_options_str += '<option value="Kranggan">Kranggan</option>';
+    Kel_Desa_options_str += '<option value="Kresek">Kresek</option>';
+    Kel_Desa_options_str += '<option value="Kroncong">Kroncong</option>';
+    Kel_Desa_options_str += '<option value="Kronjo">Kronjo</option>';
+    Kel_Desa_options_str += '<option value="Kubang">Kubang</option>';
+    Kel_Desa_options_str += '<option value="Kubang Baros+">Kubang Baros+</option>';
+    Kel_Desa_options_str += '<option value="Kubang Puji">Kubang Puji</option>';
+    Kel_Desa_options_str += '<option value="Kubangkampil">Kubangkampil</option>';
+    Kel_Desa_options_str += '<option value="Kubangkondang">Kubangkondang</option>';
+    Kel_Desa_options_str += '<option value="Kubangsari">Kubangsari</option>';
+    Kel_Desa_options_str += '<option value="Kujangjaya">Kujangjaya</option>';
+    Kel_Desa_options_str += '<option value="Kujangsari">Kujangsari</option>';
+    Kel_Desa_options_str += '<option value="Kumpay">Kumpay</option>';
+    Kel_Desa_options_str += '<option value="Kunciran">Kunciran</option>';
+    Kel_Desa_options_str += '<option value="Kunciran Indah">Kunciran Indah</option>';
+    Kel_Desa_options_str += '<option value="Kunciran Jaya">Kunciran Jaya</option>';
+    Kel_Desa_options_str += '<option value="Kupahandap">Kupahandap</option>';
+    Kel_Desa_options_str += '<option value="Kuranji">Kuranji</option>';
+    Kel_Desa_options_str += '<option value="Kurungdahu">Kurungdahu</option>';
+    Kel_Desa_options_str += '<option value="Kurungkambing">Kurungkambing</option>';
+    Kel_Desa_options_str += '<option value="Kuta Baru">Kuta Baru</option>';
+    Kel_Desa_options_str += '<option value="Kuta Bumi">Kuta Bumi</option>';
+    Kel_Desa_options_str += '<option value="Kuta Jaya">Kuta Jaya</option>';
+    Kel_Desa_options_str += '<option value="Kutakarang">Kutakarang</option>';
+    Kel_Desa_options_str += '<option value="Kutamekar">Kutamekar</option>';
+    Kel_Desa_options_str += '<option value="Kutruk">Kutruk</option>';
+    Kel_Desa_options_str += '<option value="Laban">Laban</option>';
+    Kel_Desa_options_str += '<option value="Laban Jaya">Laban Jaya</option>';
+    Kel_Desa_options_str += '<option value="Labuan">Labuan</option>';
+    Kel_Desa_options_str += '<option value="Laksana">Laksana</option>';
+    Kel_Desa_options_str += '<option value="Lambangsari">Lambangsari</option>';
+    Kel_Desa_options_str += '<option value="Langensari">Langensari</option>';
+    Kel_Desa_options_str += '<option value="Larangan Indah">Larangan Indah</option>';
+    Kel_Desa_options_str += '<option value="Larangan Selatan">Larangan Selatan</option>';
+    Kel_Desa_options_str += '<option value="Larangan Utara">Larangan Utara</option>';
+    Kel_Desa_options_str += '<option value="Lebak">Lebak</option>';
+    Kel_Desa_options_str += '<option value="Lebak Gede">Lebak Gede</option>';
+    Kel_Desa_options_str += '<option value="Lebak Kepuh">Lebak Kepuh</option>';
+    Kel_Desa_options_str += '<option value="Lebak Keusik">Lebak Keusik</option>';
+    Kel_Desa_options_str += '<option value="Lebak Parahiang">Lebak Parahiang</option>';
+    Kel_Desa_options_str += '<option value="Lebak Peundeuy">Lebak Peundeuy</option>';
+    Kel_Desa_options_str += '<option value="Lebak Wangi">Lebak Wangi</option>';
+    Kel_Desa_options_str += '<option value="Lebakasih">Lebakasih</option>';
+    Kel_Desa_options_str += '<option value="Lebakdenok">Lebakdenok</option>';
+    Kel_Desa_options_str += '<option value="Lebakgedong">Lebakgedong</option>';
+    Kel_Desa_options_str += '<option value="Lebaksangka">Lebaksangka</option>';
+    Kel_Desa_options_str += '<option value="Lebaksitu">Lebaksitu</option>';
+    Kel_Desa_options_str += '<option value="Lebaktipar">Lebaktipar</option>';
+    Kel_Desa_options_str += '<option value="Lebakwana">Lebakwana</option>';
+    Kel_Desa_options_str += '<option value="Lebakwangi">Lebakwangi</option>';
+    Kel_Desa_options_str += '<option value="Legok">Legok</option>';
+    Kel_Desa_options_str += '<option value="Legok Sukamaju">Legok Sukamaju</option>';
+    Kel_Desa_options_str += '<option value="Lembangsari">Lembangsari</option>';
+    Kel_Desa_options_str += '<option value="Lemo">Lemo</option>';
+    Kel_Desa_options_str += '<option value="Lempuyang">Lempuyang</option>';
+    Kel_Desa_options_str += '<option value="Lengkong Gudang">Lengkong Gudang</option>';
+    Kel_Desa_options_str += '<option value="Lengkong Gudang Timur">Lengkong Gudang Timur</option>';
+    Kel_Desa_options_str += '<option value="Lengkong Karya">Lengkong Karya</option>';
+    Kel_Desa_options_str += '<option value="Lengkong Kulon">Lengkong Kulon</option>';
+    Kel_Desa_options_str += '<option value="Lengkong Wetan">Lengkong Wetan</option>';
+    Kel_Desa_options_str += '<option value="Leuwibalang">Leuwibalang</option>';
+    Kel_Desa_options_str += '<option value="Leuwicoo">Leuwicoo</option>';
+    Kel_Desa_options_str += '<option value="Leuwidamar">Leuwidamar</option>';
+    Kel_Desa_options_str += '<option value="Leuwiipuh">Leuwiipuh</option>';
+    Kel_Desa_options_str += '<option value="Leuwilimus">Leuwilimus</option>';
+    Kel_Desa_options_str += '<option value="Lialang">Lialang</option>';
+    Kel_Desa_options_str += '<option value="Linduk">Linduk</option>';
+    Kel_Desa_options_str += '<option value="Lontar">Lontar</option>';
+    Kel_Desa_options_str += '<option value="Lontarbaru">Lontarbaru</option>';
+    Kel_Desa_options_str += '<option value="Lopang">Lopang</option>';
+    Kel_Desa_options_str += '<option value="Luhurjaya">Luhurjaya</option>';
+    Kel_Desa_options_str += '<option value="Luwuk">Luwuk</option>';
+    Kel_Desa_options_str += '<option value="Mahendra">Mahendra</option>';
+    Kel_Desa_options_str += '<option value="Maja">Maja</option>';
+    Kel_Desa_options_str += '<option value="Maja Baru">Maja Baru</option>';
+    Kel_Desa_options_str += '<option value="Majasari">Majasari</option>';
+    Kel_Desa_options_str += '<option value="Majau">Majau</option>';
+    Kel_Desa_options_str += '<option value="Malabar">Malabar</option>';
+    Kel_Desa_options_str += '<option value="Malang Nengah">Malang Nengah</option>';
+    Kel_Desa_options_str += '<option value="Malanggah">Malanggah</option>';
+    Kel_Desa_options_str += '<option value="Malangnengah">Malangnengah</option>';
+    Kel_Desa_options_str += '<option value="Malangsari">Malangsari</option>';
+    Kel_Desa_options_str += '<option value="Malingping Selatan">Malingping Selatan</option>';
+    Kel_Desa_options_str += '<option value="Malingping Utara">Malingping Utara</option>';
+    Kel_Desa_options_str += '<option value="Mancak">Mancak</option>';
+    Kel_Desa_options_str += '<option value="Mandalasari">Mandalasari</option>';
+    Kel_Desa_options_str += '<option value="Mandalawangi">Mandalawangi</option>';
+    Kel_Desa_options_str += '<option value="Mandaya">Mandaya</option>';
+    Kel_Desa_options_str += '<option value="Mander">Mander</option>';
+    Kel_Desa_options_str += '<option value="Manggungjaya">Manggungjaya</option>';
+    Kel_Desa_options_str += '<option value="Mangkualam">Mangkualam</option>';
+    Kel_Desa_options_str += '<option value="Mangkunegara">Mangkunegara</option>';
+    Kel_Desa_options_str += '<option value="Manglid">Manglid</option>';
+    Kel_Desa_options_str += '<option value="Mangunreja">Mangunreja</option>';
+    Kel_Desa_options_str += '<option value="Manis Jaya">Manis Jaya</option>';
+    Kel_Desa_options_str += '<option value="Maraya">Maraya</option>';
+    Kel_Desa_options_str += '<option value="Marga Jaya">Marga Jaya</option>';
+    Kel_Desa_options_str += '<option value="Marga Mulya">Marga Mulya</option>';
+    Kel_Desa_options_str += '<option value="Marga Sari">Marga Sari</option>';
+    Kel_Desa_options_str += '<option value="Margagiri">Margagiri</option>';
+    Kel_Desa_options_str += '<option value="Margaluyu">Margaluyu</option>';
+    Kel_Desa_options_str += '<option value="Margamulya">Margamulya</option>';
+    Kel_Desa_options_str += '<option value="Margasana">Margasana</option>';
+    Kel_Desa_options_str += '<option value="Margasari">Margasari</option>';
+    Kel_Desa_options_str += '<option value="Margatani">Margatani</option>';
+    Kel_Desa_options_str += '<option value="Margatirta">Margatirta</option>';
+    Kel_Desa_options_str += '<option value="Margawangi">Margawangi</option>';
+    Kel_Desa_options_str += '<option value="Masigit">Masigit</option>';
+    Kel_Desa_options_str += '<option value="Mata Gara">Mata Gara</option>';
+    Kel_Desa_options_str += '<option value="Mauk Barat">Mauk Barat</option>';
+    Kel_Desa_options_str += '<option value="Mauk Timur">Mauk Timur</option>';
+    Kel_Desa_options_str += '<option value="Mayak">Mayak</option>';
+    Kel_Desa_options_str += '<option value="Medalsari">Medalsari</option>';
+    Kel_Desa_options_str += '<option value="Medang">Medang</option>';
+    Kel_Desa_options_str += '<option value="Medong">Medong</option>';
+    Kel_Desa_options_str += '<option value="Mekar Agung">Mekar Agung</option>';
+    Kel_Desa_options_str += '<option value="Mekar Bakti">Mekar Bakti</option>';
+    Kel_Desa_options_str += '<option value="Mekar Baru">Mekar Baru</option>';
+    Kel_Desa_options_str += '<option value="Mekar Jaya">Mekar Jaya</option>';
+    Kel_Desa_options_str += '<option value="Mekar Kondang">Mekar Kondang</option>';
+    Kel_Desa_options_str += '<option value="Mekar Rahayu">Mekar Rahayu</option>';
+    Kel_Desa_options_str += '<option value="Mekarbaru">Mekarbaru</option>';
+    Kel_Desa_options_str += '<option value="Mekarjaya">Mekarjaya</option>';
+    Kel_Desa_options_str += '<option value="Mekarmanik">Mekarmanik</option>';
+    Kel_Desa_options_str += '<option value="Mekarmulya">Mekarmulya</option>';
+    Kel_Desa_options_str += '<option value="Mekarsari">Mekarsari</option>';
+    Kel_Desa_options_str += '<option value="Mekarwangi">Mekarwangi</option>';
+    Kel_Desa_options_str += '<option value="Melati">Melati</option>';
+    Kel_Desa_options_str += '<option value="Mendung">Mendung</option>';
+    Kel_Desa_options_str += '<option value="Menes">Menes</option>';
+    Kel_Desa_options_str += '<option value="Merak">Merak</option>';
+    Kel_Desa_options_str += '<option value="Mesjid Priyayi">Mesjid Priyayi</option>';
+    Kel_Desa_options_str += '<option value="Mogana">Mogana</option>';
+    Kel_Desa_options_str += '<option value="Mongpok">Mongpok</option>';
+    Kel_Desa_options_str += '<option value="Montor">Montor</option>';
+    Kel_Desa_options_str += '<option value="Muara">Muara</option>';
+    Kel_Desa_options_str += '<option value="Muara Ciujung Barat">Muara Ciujung Barat</option>';
+    Kel_Desa_options_str += '<option value="Muara Ciujung Timur">Muara Ciujung Timur</option>';
+    Kel_Desa_options_str += '<option value="Muaradua">Muaradua</option>';
+    Kel_Desa_options_str += '<option value="Mugijaya">Mugijaya</option>';
+    Kel_Desa_options_str += '<option value="Muncang">Muncang</option>';
+    Kel_Desa_options_str += '<option value="Muncangkopong">Muncangkopong</option>';
+    Kel_Desa_options_str += '<option value="Muncul">Muncul</option>';
+    Kel_Desa_options_str += '<option value="Muncung">Muncung</option>';
+    Kel_Desa_options_str += '<option value="Munjul">Munjul</option>';
+    Kel_Desa_options_str += '<option value="Muruy">Muruy</option>';
+    Kel_Desa_options_str += '<option value="Nagara">Nagara</option>';
+    Kel_Desa_options_str += '<option value="Nagara Padang">Nagara Padang</option>';
+    Kel_Desa_options_str += '<option value="Nambo Ilir">Nambo Ilir</option>';
+    Kel_Desa_options_str += '<option value="Nambo Udik">Nambo Udik</option>';
+    Kel_Desa_options_str += '<option value="Nambojaya">Nambojaya</option>';
+    Kel_Desa_options_str += '<option value="Nameng">Nameng</option>';
+    Kel_Desa_options_str += '<option value="Nangerang">Nangerang</option>';
+    Kel_Desa_options_str += '<option value="Nanggala">Nanggala</option>';
+    Kel_Desa_options_str += '<option value="Nanggung">Nanggung</option>';
+    Kel_Desa_options_str += '<option value="Narimbang Mulia">Narimbang Mulia</option>';
+    Kel_Desa_options_str += '<option value="Nayagati">Nayagati</option>';
+    Kel_Desa_options_str += '<option value="Neglasari">Neglasari</option>';
+    Kel_Desa_options_str += '<option value="Nembol">Nembol</option>';
+    Kel_Desa_options_str += '<option value="Neroktog">Neroktog</option>';
+    Kel_Desa_options_str += '<option value="Nusajaya">Nusajaya</option>';
+    Kel_Desa_options_str += '<option value="Nyapah">Nyapah</option>';
+    Kel_Desa_options_str += '<option value="Nyompok">Nyompok</option>';
+    Kel_Desa_options_str += '<option value="Onyam">Onyam</option>';
+    Kel_Desa_options_str += '<option value="Pabean">Pabean</option>';
+    Kel_Desa_options_str += '<option value="Pabuaran">Pabuaran</option>';
+    Kel_Desa_options_str += '<option value="Pabuaran Tumpeng">Pabuaran Tumpeng</option>';
+    Kel_Desa_options_str += '<option value="Padahayu">Padahayu</option>';
+    Kel_Desa_options_str += '<option value="Padaherang">Padaherang</option>';
+    Kel_Desa_options_str += '<option value="Padamulya">Padamulya</option>';
+    Kel_Desa_options_str += '<option value="Padarincang">Padarincang</option>';
+    Kel_Desa_options_str += '<option value="Padasuka">Padasuka</option>';
+    Kel_Desa_options_str += '<option value="Padasuka+">Padasuka+</option>';
+    Kel_Desa_options_str += '<option value="Pagadungan">Pagadungan</option>';
+    Kel_Desa_options_str += '<option value="Pagedangan">Pagedangan</option>';
+    Kel_Desa_options_str += '<option value="Pagedangan Ilir">Pagedangan Ilir</option>';
+    Kel_Desa_options_str += '<option value="Pagedangan Udik">Pagedangan Udik</option>';
+    Kel_Desa_options_str += '<option value="Pagelaran">Pagelaran</option>';
+    Kel_Desa_options_str += '<option value="Pagenjahan">Pagenjahan</option>';
+    Kel_Desa_options_str += '<option value="Pageragung">Pageragung</option>';
+    Kel_Desa_options_str += '<option value="Pagerbatu">Pagerbatu</option>';
+    Kel_Desa_options_str += '<option value="Pagintungan">Pagintungan</option>';
+    Kel_Desa_options_str += '<option value="Paja">Paja</option>';
+    Kel_Desa_options_str += '<option value="Pajagan">Pajagan</option>';
+    Kel_Desa_options_str += '<option value="Pajang">Pajang</option>';
+    Kel_Desa_options_str += '<option value="Pakojan">Pakojan</option>';
+    Kel_Desa_options_str += '<option value="Paku Alam">Paku Alam</option>';
+    Kel_Desa_options_str += '<option value="Paku Jaya">Paku Jaya</option>';
+    Kel_Desa_options_str += '<option value="Pakualam">Pakualam</option>';
+    Kel_Desa_options_str += '<option value="Pakuhaji">Pakuhaji</option>';
+    Kel_Desa_options_str += '<option value="Pakulonan">Pakulonan</option>';
+    Kel_Desa_options_str += '<option value="Pakulonan Barat">Pakulonan Barat</option>';
+    Kel_Desa_options_str += '<option value="Pakuluran">Pakuluran</option>';
+    Kel_Desa_options_str += '<option value="Pakuncen">Pakuncen</option>';
+    Kel_Desa_options_str += '<option value="Palanyar">Palanyar</option>';
+    Kel_Desa_options_str += '<option value="Palasari">Palasari</option>';
+    Kel_Desa_options_str += '<option value="Palembang">Palembang</option>';
+    Kel_Desa_options_str += '<option value="Palurahan">Palurahan</option>';
+    Kel_Desa_options_str += '<option value="Pamanuk">Pamanuk</option>';
+    Kel_Desa_options_str += '<option value="Pamarayan">Pamarayan</option>';
+    Kel_Desa_options_str += '<option value="Pamengkang">Pamengkang</option>';
+    Kel_Desa_options_str += '<option value="Pamong">Pamong</option>';
+    Kel_Desa_options_str += '<option value="Pamubulan">Pamubulan</option>';
+    Kel_Desa_options_str += '<option value="Pamulang Barat">Pamulang Barat</option>';
+    Kel_Desa_options_str += '<option value="Pamulang Timur">Pamulang Timur</option>';
+    Kel_Desa_options_str += '<option value="Panacaran">Panacaran</option>';
+    Kel_Desa_options_str += '<option value="Panamping">Panamping</option>';
+    Kel_Desa_options_str += '<option value="Panancangan">Panancangan</option>';
+    Kel_Desa_options_str += '<option value="Pancalaksana">Pancalaksana</option>';
+    Kel_Desa_options_str += '<option value="Pancanegara">Pancanegara</option>';
+    Kel_Desa_options_str += '<option value="Pancaregang">Pancaregang</option>';
+    Kel_Desa_options_str += '<option value="Pancur">Pancur</option>';
+    Kel_Desa_options_str += '<option value="Pandat">Pandat</option>';
+    Kel_Desa_options_str += '<option value="Pandeglang">Pandeglang</option>';
+    Kel_Desa_options_str += '<option value="Panenjoan">Panenjoan</option>';
+    Kel_Desa_options_str += '<option value="Pangadegan">Pangadegan</option>';
+    Kel_Desa_options_str += '<option value="Pangarengan">Pangarengan</option>';
+    Kel_Desa_options_str += '<option value="Pangawinan">Pangawinan</option>';
+    Kel_Desa_options_str += '<option value="Panggarangan">Panggarangan</option>';
+    Kel_Desa_options_str += '<option value="Panggung Rawi">Panggung Rawi</option>';
+    Kel_Desa_options_str += '<option value="Panggungjati">Panggungjati</option>';
+    Kel_Desa_options_str += '<option value="Pangkalan">Pangkalan</option>';
+    Kel_Desa_options_str += '<option value="Pangkat">Pangkat</option>';
+    Kel_Desa_options_str += '<option value="Paniis">Paniis</option>';
+    Kel_Desa_options_str += '<option value="Panimbangjaya">Panimbangjaya</option>';
+    Kel_Desa_options_str += '<option value="Paninggilan">Paninggilan</option>';
+    Kel_Desa_options_str += '<option value="Paninggilan Utara">Paninggilan Utara</option>';
+    Kel_Desa_options_str += '<option value="Panjangjaya">Panjangjaya</option>';
+    Kel_Desa_options_str += '<option value="Panongan">Panongan</option>';
+    Kel_Desa_options_str += '<option value="Panosogan">Panosogan</option>';
+    Kel_Desa_options_str += '<option value="Panunggangan">Panunggangan</option>';
+    Kel_Desa_options_str += '<option value="Panunggangan Barat">Panunggangan Barat</option>';
+    Kel_Desa_options_str += '<option value="Panunggangan Timur">Panunggangan Timur</option>';
+    Kel_Desa_options_str += '<option value="Panunggangan Utara">Panunggangan Utara</option>';
+    Kel_Desa_options_str += '<option value="Panunggulan">Panunggulan</option>';
+    Kel_Desa_options_str += '<option value="Panyabrangan">Panyabrangan</option>';
+    Kel_Desa_options_str += '<option value="Panyaungan">Panyaungan</option>';
+    Kel_Desa_options_str += '<option value="Panyaungan Jaya">Panyaungan Jaya</option>';
+    Kel_Desa_options_str += '<option value="Panyirapan">Panyirapan</option>';
+    Kel_Desa_options_str += '<option value="Parage">Parage</option>';
+    Kel_Desa_options_str += '<option value="Parahu">Parahu</option>';
+    Kel_Desa_options_str += '<option value="Parakan">Parakan</option>';
+    Kel_Desa_options_str += '<option value="Parakanbeusi">Parakanbeusi</option>';
+    Kel_Desa_options_str += '<option value="Parakanlima">Parakanlima</option>';
+    Kel_Desa_options_str += '<option value="Pareang">Pareang</option>';
+    Kel_Desa_options_str += '<option value="Pari">Pari</option>';
+    Kel_Desa_options_str += '<option value="Parigi">Parigi</option>';
+    Kel_Desa_options_str += '<option value="Parumasan">Parumasan</option>';
+    Kel_Desa_options_str += '<option value="Parung Jaya">Parung Jaya</option>';
+    Kel_Desa_options_str += '<option value="Parung Serab">Parung Serab</option>';
+    Kel_Desa_options_str += '<option value="Parungkokosan">Parungkokosan</option>';
+    Kel_Desa_options_str += '<option value="Parungkujang">Parungkujang</option>';
+    Kel_Desa_options_str += '<option value="Parungpanjang">Parungpanjang</option>';
+    Kel_Desa_options_str += '<option value="Parungsari">Parungsari</option>';
+    Kel_Desa_options_str += '<option value="Pasanggrahan">Pasanggrahan</option>';
+    Kel_Desa_options_str += '<option value="Pasar Kemis">Pasar Kemis</option>';
+    Kel_Desa_options_str += '<option value="Pasar Keong">Pasar Keong</option>';
+    Kel_Desa_options_str += '<option value="Pasarbaru">Pasarbaru</option>';
+    Kel_Desa_options_str += '<option value="Pasauran">Pasauran</option>';
+    Kel_Desa_options_str += '<option value="Pasilian">Pasilian</option>';
+    Kel_Desa_options_str += '<option value="Pasindangan">Pasindangan</option>';
+    Kel_Desa_options_str += '<option value="Pasir">Pasir</option>';
+    Kel_Desa_options_str += '<option value="Pasir Ampo">Pasir Ampo</option>';
+    Kel_Desa_options_str += '<option value="Pasir Barat">Pasir Barat</option>';
+    Kel_Desa_options_str += '<option value="Pasir Bitung">Pasir Bitung</option>';
+    Kel_Desa_options_str += '<option value="Pasir Bolang">Pasir Bolang</option>';
+    Kel_Desa_options_str += '<option value="Pasir Gadung">Pasir Gadung</option>';
+    Kel_Desa_options_str += '<option value="Pasir Gintung">Pasir Gintung</option>';
+    Kel_Desa_options_str += '<option value="Pasir Jaya">Pasir Jaya</option>';
+    Kel_Desa_options_str += '<option value="Pasir Kecapi">Pasir Kecapi</option>';
+    Kel_Desa_options_str += '<option value="Pasir Kembang">Pasir Kembang</option>';
+    Kel_Desa_options_str += '<option value="Pasir Kupa">Pasir Kupa</option>';
+    Kel_Desa_options_str += '<option value="Pasir Muncang">Pasir Muncang</option>';
+    Kel_Desa_options_str += '<option value="Pasir Nangka">Pasir Nangka</option>';
+    Kel_Desa_options_str += '<option value="Pasir Tanjung">Pasir Tanjung</option>';
+    Kel_Desa_options_str += '<option value="Pasirawi">Pasirawi</option>';
+    Kel_Desa_options_str += '<option value="Pasirbungur">Pasirbungur</option>';
+    Kel_Desa_options_str += '<option value="Pasirbuyut">Pasirbuyut</option>';
+    Kel_Desa_options_str += '<option value="Pasirdurung">Pasirdurung</option>';
+    Kel_Desa_options_str += '<option value="Pasireurih">Pasireurih</option>';
+    Kel_Desa_options_str += '<option value="Pasirgadung">Pasirgadung</option>';
+    Kel_Desa_options_str += '<option value="Pasirgombong">Pasirgombong</option>';
+    Kel_Desa_options_str += '<option value="Pasirhaur">Pasirhaur</option>';
+    Kel_Desa_options_str += '<option value="Pasirjaksa">Pasirjaksa</option>';
+    Kel_Desa_options_str += '<option value="Pasirkadu">Pasirkadu</option>';
+    Kel_Desa_options_str += '<option value="Pasirkarag">Pasirkarag</option>';
+    Kel_Desa_options_str += '<option value="Pasirlancar">Pasirlancar</option>';
+    Kel_Desa_options_str += '<option value="Pasirlimus">Pasirlimus</option>';
+    Kel_Desa_options_str += '<option value="Pasirloa">Pasirloa</option>';
+    Kel_Desa_options_str += '<option value="Pasirmae">Pasirmae</option>';
+    Kel_Desa_options_str += '<option value="Pasirnangka">Pasirnangka</option>';
+    Kel_Desa_options_str += '<option value="Pasirpanjang">Pasirpanjang</option>';
+    Kel_Desa_options_str += '<option value="Pasirpeuteuy">Pasirpeuteuy</option>';
+    Kel_Desa_options_str += '<option value="Pasirsedang">Pasirsedang</option>';
+    Kel_Desa_options_str += '<option value="Pasirtangkil">Pasirtangkil</option>';
+    Kel_Desa_options_str += '<option value="Pasirtenjo">Pasirtenjo</option>';
+    Kel_Desa_options_str += '<option value="Pasirwaru+">Pasirwaru+</option>';
+    Kel_Desa_options_str += '<option value="Pasuluhan">Pasuluhan</option>';
+    Kel_Desa_options_str += '<option value="Patia">Patia</option>';
+    Kel_Desa_options_str += '<option value="Patra Manggala">Patra Manggala</option>';
+    Kel_Desa_options_str += '<option value="Patra Sana">Patra Sana</option>';
+    Kel_Desa_options_str += '<option value="Pedaleman">Pedaleman</option>';
+    Kel_Desa_options_str += '<option value="Pedurenan">Pedurenan</option>';
+    Kel_Desa_options_str += '<option value="Pegadingan">Pegadingan</option>';
+    Kel_Desa_options_str += '<option value="Pegandikan">Pegandikan</option>';
+    Kel_Desa_options_str += '<option value="Pejamben">Pejamben</option>';
+    Kel_Desa_options_str += '<option value="Pejaten">Pejaten</option>';
+    Kel_Desa_options_str += '<option value="Pekayon">Pekayon</option>';
+    Kel_Desa_options_str += '<option value="Pelamunan">Pelamunan</option>';
+    Kel_Desa_options_str += '<option value="Pelawad">Pelawad</option>';
+    Kel_Desa_options_str += '<option value="Pematang">Pematang</option>';
+    Kel_Desa_options_str += '<option value="Pengampelan">Pengampelan</option>';
+    Kel_Desa_options_str += '<option value="Pengarengan+">Pengarengan+</option>';
+    Kel_Desa_options_str += '<option value="Penggalang">Penggalang</option>';
+    Kel_Desa_options_str += '<option value="Perdana">Perdana</option>';
+    Kel_Desa_options_str += '<option value="Perigi">Perigi</option>';
+    Kel_Desa_options_str += '<option value="Perigi Baru">Perigi Baru</option>';
+    Kel_Desa_options_str += '<option value="Periuk">Periuk</option>';
+    Kel_Desa_options_str += '<option value="Periuk Jaya">Periuk Jaya</option>';
+    Kel_Desa_options_str += '<option value="Pete">Pete</option>';
+    Kel_Desa_options_str += '<option value="Petir">Petir</option>';
+    Kel_Desa_options_str += '<option value="Peucangpari">Peucangpari</option>';
+    Kel_Desa_options_str += '<option value="Peusar">Peusar</option>';
+    Kel_Desa_options_str += '<option value="Pinang">Pinang</option>';
+    Kel_Desa_options_str += '<option value="Pipitan">Pipitan</option>';
+    Kel_Desa_options_str += '<option value="Pisangan">Pisangan</option>';
+    Kel_Desa_options_str += '<option value="Pisangan Jaya">Pisangan Jaya</option>';
+    Kel_Desa_options_str += '<option value="Pondok Aren">Pondok Aren</option>';
+    Kel_Desa_options_str += '<option value="Pondok Bahar">Pondok Bahar</option>';
+    Kel_Desa_options_str += '<option value="Pondok Benda">Pondok Benda</option>';
+    Kel_Desa_options_str += '<option value="Pondok Betung">Pondok Betung</option>';
+    Kel_Desa_options_str += '<option value="Pondok Cabe Ilir">Pondok Cabe Ilir</option>';
+    Kel_Desa_options_str += '<option value="Pondok Cabe Udik">Pondok Cabe Udik</option>';
+    Kel_Desa_options_str += '<option value="Pondok Jagung">Pondok Jagung</option>';
+    Kel_Desa_options_str += '<option value="Pondok Jagung Timur">Pondok Jagung Timur</option>';
+    Kel_Desa_options_str += '<option value="Pondok Jaya">Pondok Jaya</option>';
+    Kel_Desa_options_str += '<option value="Pondok Kacang Barat">Pondok Kacang Barat</option>';
+    Kel_Desa_options_str += '<option value="Pondok Kacang Timur">Pondok Kacang Timur</option>';
+    Kel_Desa_options_str += '<option value="Pondok Kahuru">Pondok Kahuru</option>';
+    Kel_Desa_options_str += '<option value="Pondok Karya">Pondok Karya</option>';
+    Kel_Desa_options_str += '<option value="Pondok Kelor">Pondok Kelor</option>';
+    Kel_Desa_options_str += '<option value="Pondok Pucung">Pondok Pucung</option>';
+    Kel_Desa_options_str += '<option value="Pondok Ranji">Pondok Ranji</option>';
+    Kel_Desa_options_str += '<option value="Pondokpanjang">Pondokpanjang</option>';
+    Kel_Desa_options_str += '<option value="Pontang">Pontang</option>';
+    Kel_Desa_options_str += '<option value="Pontang Legon">Pontang Legon</option>';
+    Kel_Desa_options_str += '<option value="Poris Jaya">Poris Jaya</option>';
+    Kel_Desa_options_str += '<option value="Poris Plawad">Poris Plawad</option>';
+    Kel_Desa_options_str += '<option value="Poris Plawad Indah">Poris Plawad Indah</option>';
+    Kel_Desa_options_str += '<option value="Poris Plawad Utara">Poris Plawad Utara</option>';
+    Kel_Desa_options_str += '<option value="Porisgaga">Porisgaga</option>';
+    Kel_Desa_options_str += '<option value="Porisgaga Baru">Porisgaga Baru</option>';
+    Kel_Desa_options_str += '<option value="Prabugantungan">Prabugantungan</option>';
+    Kel_Desa_options_str += '<option value="Pringwulung">Pringwulung</option>';
+    Kel_Desa_options_str += '<option value="Pudar">Pudar</option>';
+    Kel_Desa_options_str += '<option value="Pulo">Pulo</option>';
+    Kel_Desa_options_str += '<option value="Pulo Kencana">Pulo Kencana</option>';
+    Kel_Desa_options_str += '<option value="Pulo Panjang">Pulo Panjang</option>';
+    Kel_Desa_options_str += '<option value="Puloampel">Puloampel</option>';
+    Kel_Desa_options_str += '<option value="Purwadadi">Purwadadi</option>';
+    Kel_Desa_options_str += '<option value="Purwakarta">Purwakarta</option>';
+    Kel_Desa_options_str += '<option value="Purwaraja">Purwaraja</option>';
+    Kel_Desa_options_str += '<option value="Puser">Puser</option>';
+    Kel_Desa_options_str += '<option value="Ragasmesigit">Ragasmesigit</option>';
+    Kel_Desa_options_str += '<option value="Rahayu">Rahayu</option>';
+    Kel_Desa_options_str += '<option value="Rahong">Rahong</option>';
+    Kel_Desa_options_str += '<option value="Rajeg">Rajeg</option>';
+    Kel_Desa_options_str += '<option value="Rajegmulya">Rajegmulya</option>';
+    Kel_Desa_options_str += '<option value="Ramanuju">Ramanuju</option>';
+    Kel_Desa_options_str += '<option value="Ramea">Ramea</option>';
+    Kel_Desa_options_str += '<option value="Ranca Bango">Ranca Bango</option>';
+    Kel_Desa_options_str += '<option value="Ranca Gede">Ranca Gede</option>';
+    Kel_Desa_options_str += '<option value="Ranca Ilat">Ranca Ilat</option>';
+    Kel_Desa_options_str += '<option value="Ranca Iyuh">Ranca Iyuh</option>';
+    Kel_Desa_options_str += '<option value="Ranca Kalapa">Ranca Kalapa</option>';
+    Kel_Desa_options_str += '<option value="Ranca Labuh">Ranca Labuh</option>';
+    Kel_Desa_options_str += '<option value="Rancabuaya">Rancabuaya</option>';
+    Kel_Desa_options_str += '<option value="Rancabugel">Rancabugel</option>';
+    Kel_Desa_options_str += '<option value="Rancagong">Rancagong</option>';
+    Kel_Desa_options_str += '<option value="Rancapinang">Rancapinang</option>';
+    Kel_Desa_options_str += '<option value="Rancasanggal">Rancasanggal</option>';
+    Kel_Desa_options_str += '<option value="Rancaseneng">Rancaseneng</option>';
+    Kel_Desa_options_str += '<option value="Rancasumur">Rancasumur</option>';
+    Kel_Desa_options_str += '<option value="Rancateureup">Rancateureup</option>';
+    Kel_Desa_options_str += '<option value="Randakari">Randakari</option>';
+    Kel_Desa_options_str += '<option value="Rangkasbitung Barat">Rangkasbitung Barat</option>';
+    Kel_Desa_options_str += '<option value="Rangkasbitung Timur">Rangkasbitung Timur</option>';
+    Kel_Desa_options_str += '<option value="Ranjeng">Ranjeng</option>';
+    Kel_Desa_options_str += '<option value="Rawa Arum">Rawa Arum</option>';
+    Kel_Desa_options_str += '<option value="Rawa Buntu">Rawa Buntu</option>';
+    Kel_Desa_options_str += '<option value="Rawa Burung">Rawa Burung</option>';
+    Kel_Desa_options_str += '<option value="Rawa Kidang">Rawa Kidang</option>';
+    Kel_Desa_options_str += '<option value="Rawa Mekar Jaya">Rawa Mekar Jaya</option>';
+    Kel_Desa_options_str += '<option value="Rawa Rengas">Rawa Rengas</option>';
+    Kel_Desa_options_str += '<option value="Rawaboni">Rawaboni</option>';
+    Kel_Desa_options_str += '<option value="Rawasari">Rawasari</option>';
+    Kel_Desa_options_str += '<option value="Rempoa">Rempoa</option>';
+    Kel_Desa_options_str += '<option value="Rengas">Rengas</option>';
+    Kel_Desa_options_str += '<option value="Renged">Renged</option>';
+    Kel_Desa_options_str += '<option value="Rocek">Rocek</option>';
+    Kel_Desa_options_str += '<option value="Saga">Saga</option>';
+    Kel_Desa_options_str += '<option value="Sajira">Sajira</option>';
+    Kel_Desa_options_str += '<option value="Sajiramekar">Sajiramekar</option>';
+    Kel_Desa_options_str += '<option value="Saketi">Saketi</option>';
+    Kel_Desa_options_str += '<option value="Salapraya">Salapraya</option>';
+    Kel_Desa_options_str += '<option value="Salembaran Jati">Salembaran Jati</option>';
+    Kel_Desa_options_str += '<option value="Salembaran Jaya">Salembaran Jaya</option>';
+    Kel_Desa_options_str += '<option value="Salira">Salira</option>';
+    Kel_Desa_options_str += '<option value="Samangraya">Samangraya</option>';
+    Kel_Desa_options_str += '<option value="Sambilawang">Sambilawang</option>';
+    Kel_Desa_options_str += '<option value="Sampangbitung">Sampangbitung</option>';
+    Kel_Desa_options_str += '<option value="Samparwadi">Samparwadi</option>';
+    Kel_Desa_options_str += '<option value="Sampir">Sampir</option>';
+    Kel_Desa_options_str += '<option value="Sampora">Sampora</option>';
+    Kel_Desa_options_str += '<option value="Sanding">Sanding</option>';
+    Kel_Desa_options_str += '<option value="Sanghiang">Sanghiang</option>';
+    Kel_Desa_options_str += '<option value="Sanghiangdengdek">Sanghiangdengdek</option>';
+    Kel_Desa_options_str += '<option value="Sangiang">Sangiang</option>';
+    Kel_Desa_options_str += '<option value="Sangiang Jaya">Sangiang Jaya</option>';
+    Kel_Desa_options_str += '<option value="Sangiang Tanjung">Sangiang Tanjung</option>';
+    Kel_Desa_options_str += '<option value="Sangkan Manik">Sangkan Manik</option>';
+    Kel_Desa_options_str += '<option value="Sangkanwangi">Sangkanwangi</option>';
+    Kel_Desa_options_str += '<option value="Saninten">Saninten</option>';
+    Kel_Desa_options_str += '<option value="Sarageni">Sarageni</option>';
+    Kel_Desa_options_str += '<option value="Sarakan">Sarakan</option>';
+    Kel_Desa_options_str += '<option value="Sarua">Sarua</option>';
+    Kel_Desa_options_str += '<option value="Sarua Indah">Sarua Indah</option>';
+    Kel_Desa_options_str += '<option value="Saruni">Saruni</option>';
+    Kel_Desa_options_str += '<option value="Sasak">Sasak</option>';
+    Kel_Desa_options_str += '<option value="Sawah">Sawah</option>';
+    Kel_Desa_options_str += '<option value="Sawah Baru">Sawah Baru</option>';
+    Kel_Desa_options_str += '<option value="Sawahluhur">Sawahluhur</option>';
+    Kel_Desa_options_str += '<option value="Sawarna">Sawarna</option>';
+    Kel_Desa_options_str += '<option value="Sawarna Timur">Sawarna Timur</option>';
+    Kel_Desa_options_str += '<option value="Sayar">Sayar</option>';
+    Kel_Desa_options_str += '<option value="Sekarwangi">Sekarwangi</option>';
+    Kel_Desa_options_str += '<option value="Sekong">Sekong</option>';
+    Kel_Desa_options_str += '<option value="Selapajang Jaya">Selapajang Jaya</option>';
+    Kel_Desa_options_str += '<option value="Selaraja">Selaraja</option>';
+    Kel_Desa_options_str += '<option value="Senang Hati">Senang Hati</option>';
+    Kel_Desa_options_str += '<option value="Senangsari">Senangsari</option>';
+    Kel_Desa_options_str += '<option value="Sentul">Sentul</option>';
+    Kel_Desa_options_str += '<option value="Sentul Jaya">Sentul Jaya</option>';
+    Kel_Desa_options_str += '<option value="Sepang">Sepang</option>';
+    Kel_Desa_options_str += '<option value="Sepatan">Sepatan</option>';
+    Kel_Desa_options_str += '<option value="Serang">Serang</option>';
+    Kel_Desa_options_str += '<option value="Serdang">Serdang</option>';
+    Kel_Desa_options_str += '<option value="Serdang Kulon">Serdang Kulon</option>';
+    Kel_Desa_options_str += '<option value="Serdang Wetan">Serdang Wetan</option>';
+    Kel_Desa_options_str += '<option value="Serpong">Serpong</option>';
+    Kel_Desa_options_str += '<option value="Setrajaya">Setrajaya</option>';
+    Kel_Desa_options_str += '<option value="Setu">Setu</option>';
+    Kel_Desa_options_str += '<option value="Seuat">Seuat</option>';
+    Kel_Desa_options_str += '<option value="Seuat Jaya">Seuat Jaya</option>';
+    Kel_Desa_options_str += '<option value="Seuseupan">Seuseupan</option>';
+    Kel_Desa_options_str += '<option value="Sidamukti">Sidamukti</option>';
+    Kel_Desa_options_str += '<option value="Sidoko">Sidoko</option>';
+    Kel_Desa_options_str += '<option value="Sigedong">Sigedong</option>';
+    Kel_Desa_options_str += '<option value="Siketug">Siketug</option>';
+    Kel_Desa_options_str += '<option value="Sikulan">Sikulan</option>';
+    Kel_Desa_options_str += '<option value="Silebu">Silebu</option>';
+    Kel_Desa_options_str += '<option value="Sinargalih">Sinargalih</option>';
+    Kel_Desa_options_str += '<option value="Sinarjaya">Sinarjaya</option>';
+    Kel_Desa_options_str += '<option value="Sinarmukti">Sinarmukti</option>';
+    Kel_Desa_options_str += '<option value="Sindang Asih">Sindang Asih</option>';
+    Kel_Desa_options_str += '<option value="Sindang Jaya">Sindang Jaya</option>';
+    Kel_Desa_options_str += '<option value="Sindang Panon">Sindang Panon</option>';
+    Kel_Desa_options_str += '<option value="Sindang Sari">Sindang Sari</option>';
+    Kel_Desa_options_str += '<option value="Sindang Sono">Sindang Sono</option>';
+    Kel_Desa_options_str += '<option value="Sindanghayu">Sindanghayu</option>';
+    Kel_Desa_options_str += '<option value="Sindangheula">Sindangheula</option>';
+    Kel_Desa_options_str += '<option value="Sindangkarya">Sindangkarya</option>';
+    Kel_Desa_options_str += '<option value="Sindangkerta">Sindangkerta</option>';
+    Kel_Desa_options_str += '<option value="Sindanglaut">Sindanglaut</option>';
+    Kel_Desa_options_str += '<option value="Sindanglaya">Sindanglaya</option>';
+    Kel_Desa_options_str += '<option value="Sindangmandi">Sindangmandi</option>';
+    Kel_Desa_options_str += '<option value="Sindangmulya">Sindangmulya</option>';
+    Kel_Desa_options_str += '<option value="Sindangratu">Sindangratu</option>';
+    Kel_Desa_options_str += '<option value="Sindangresmi">Sindangresmi</option>';
+    Kel_Desa_options_str += '<option value="Sindangsari">Sindangsari</option>';
+    Kel_Desa_options_str += '<option value="Sindangwangi">Sindangwangi</option>';
+    Kel_Desa_options_str += '<option value="Singamerta">Singamerta</option>';
+    Kel_Desa_options_str += '<option value="Singarajan">Singarajan</option>';
+    Kel_Desa_options_str += '<option value="Sipayung">Sipayung</option>';
+    Kel_Desa_options_str += '<option value="Siremen">Siremen</option>';
+    Kel_Desa_options_str += '<option value="Sirnagalih">Sirnagalih</option>';
+    Kel_Desa_options_str += '<option value="Situ Gadung">Situ Gadung</option>';
+    Kel_Desa_options_str += '<option value="Situmulya">Situmulya</option>';
+    Kel_Desa_options_str += '<option value="Situregen">Situregen</option>';
+    Kel_Desa_options_str += '<option value="Situterate+">Situterate+</option>';
+    Kel_Desa_options_str += '<option value="Sobang">Sobang</option>';
+    Kel_Desa_options_str += '<option value="Sodong">Sodong</option>';
+    Kel_Desa_options_str += '<option value="Sogong">Sogong</option>';
+    Kel_Desa_options_str += '<option value="Solear">Solear</option>';
+    Kel_Desa_options_str += '<option value="Songgom Jaya">Songgom Jaya</option>';
+    Kel_Desa_options_str += '<option value="Sorongan">Sorongan</option>';
+    Kel_Desa_options_str += '<option value="Sudamanik">Sudamanik</option>';
+    Kel_Desa_options_str += '<option value="Sudimanik">Sudimanik</option>';
+    Kel_Desa_options_str += '<option value="Sudimara Barat">Sudimara Barat</option>';
+    Kel_Desa_options_str += '<option value="Sudimara Jaya">Sudimara Jaya</option>';
+    Kel_Desa_options_str += '<option value="Sudimara Pinang">Sudimara Pinang</option>';
+    Kel_Desa_options_str += '<option value="Sudimara Selatan">Sudimara Selatan</option>';
+    Kel_Desa_options_str += '<option value="Sudimara Timur">Sudimara Timur</option>';
+    Kel_Desa_options_str += '<option value="Sujung">Sujung</option>';
+    Kel_Desa_options_str += '<option value="Suka Bakti">Suka Bakti</option>';
+    Kel_Desa_options_str += '<option value="Suka Damai">Suka Damai</option>';
+    Kel_Desa_options_str += '<option value="Suka Harja">Suka Harja</option>';
+    Kel_Desa_options_str += '<option value="Suka Indah">Suka Indah</option>';
+    Kel_Desa_options_str += '<option value="Suka Mulya">Suka Mulya</option>';
+    Kel_Desa_options_str += '<option value="Suka Nagara">Suka Nagara</option>';
+    Kel_Desa_options_str += '<option value="Sukaasih">Sukaasih</option>';
+    Kel_Desa_options_str += '<option value="Sukabares">Sukabares</option>';
+    Kel_Desa_options_str += '<option value="Sukacai">Sukacai</option>';
+    Kel_Desa_options_str += '<option value="Sukadalem">Sukadalem</option>';
+    Kel_Desa_options_str += '<option value="Sukadame">Sukadame</option>';
+    Kel_Desa_options_str += '<option value="Sukadana">Sukadana</option>';
+    Kel_Desa_options_str += '<option value="Sukadaya">Sukadaya</option>';
+    Kel_Desa_options_str += '<option value="Sukadiri">Sukadiri</option>';
+    Kel_Desa_options_str += '<option value="Sukaharja">Sukaharja</option>';
+    Kel_Desa_options_str += '<option value="Sukajadi">Sukajadi</option>';
+    Kel_Desa_options_str += '<option value="Sukajaya">Sukajaya</option>';
+    Kel_Desa_options_str += '<option value="Sukalaba">Sukalaba</option>';
+    Kel_Desa_options_str += '<option value="Sukalaksana">Sukalaksana</option>';
+    Kel_Desa_options_str += '<option value="Sukalangu">Sukalangu</option>';
+    Kel_Desa_options_str += '<option value="Sukamaju">Sukamaju</option>';
+    Kel_Desa_options_str += '<option value="Sukamampir">Sukamampir</option>';
+    Kel_Desa_options_str += '<option value="Sukamanah">Sukamanah</option>';
+    Kel_Desa_options_str += '<option value="Sukamantri">Sukamantri</option>';
+    Kel_Desa_options_str += '<option value="Sukamarga">Sukamarga</option>';
+    Kel_Desa_options_str += '<option value="Sukamekarsari">Sukamekarsari</option>';
+    Kel_Desa_options_str += '<option value="Sukamenak">Sukamenak</option>';
+    Kel_Desa_options_str += '<option value="Sukamenak+">Sukamenak+</option>';
+    Kel_Desa_options_str += '<option value="Sukamulya">Sukamulya</option>';
+    Kel_Desa_options_str += '<option value="Sukamurni">Sukamurni</option>';
+    Kel_Desa_options_str += '<option value="Sukanagara">Sukanagara</option>';
+    Kel_Desa_options_str += '<option value="Sukanegara">Sukanegara</option>';
+    Kel_Desa_options_str += '<option value="Sukaraja">Sukaraja</option>';
+    Kel_Desa_options_str += '<option value="Sukarame">Sukarame</option>';
+    Kel_Desa_options_str += '<option value="Sukarasa">Sukarasa</option>';
+    Kel_Desa_options_str += '<option value="Sukaratu">Sukaratu</option>';
+    Kel_Desa_options_str += '<option value="Sukarena">Sukarena</option>';
+    Kel_Desa_options_str += '<option value="Sukarendah">Sukarendah</option>';
+    Kel_Desa_options_str += '<option value="Sukaresmi">Sukaresmi</option>';
+    Kel_Desa_options_str += '<option value="Sukasaba">Sukasaba</option>';
+    Kel_Desa_options_str += '<option value="Sukasari">Sukasari</option>';
+    Kel_Desa_options_str += '<option value="Sukasenang">Sukasenang</option>';
+    Kel_Desa_options_str += '<option value="Sukaseneng">Sukaseneng</option>';
+    Kel_Desa_options_str += '<option value="Sukatani">Sukatani</option>';
+    Kel_Desa_options_str += '<option value="Sukawali">Sukawali</option>';
+    Kel_Desa_options_str += '<option value="Sukawana">Sukawana</option>';
+    Kel_Desa_options_str += '<option value="Sukawaris">Sukawaris</option>';
+    Kel_Desa_options_str += '<option value="Sukmajaya">Sukmajaya</option>';
+    Kel_Desa_options_str += '<option value="Sumber Waras">Sumber Waras</option>';
+    Kel_Desa_options_str += '<option value="Sumberjaya">Sumberjaya</option>';
+    Kel_Desa_options_str += '<option value="Sumur Bandung">Sumur Bandung</option>';
+    Kel_Desa_options_str += '<option value="Sumur Pacing">Sumur Pacing</option>';
+    Kel_Desa_options_str += '<option value="Sumuranja">Sumuranja</option>';
+    Kel_Desa_options_str += '<option value="Sumurbandung">Sumurbandung</option>';
+    Kel_Desa_options_str += '<option value="Sumurbatu">Sumurbatu</option>';
+    Kel_Desa_options_str += '<option value="Sumurlaban">Sumurlaban</option>';
+    Kel_Desa_options_str += '<option value="Sumurpecung">Sumurpecung</option>';
+    Kel_Desa_options_str += '<option value="Suradita">Suradita</option>';
+    Kel_Desa_options_str += '<option value="Surakarta">Surakarta</option>';
+    Kel_Desa_options_str += '<option value="Suralaya">Suralaya</option>';
+    Kel_Desa_options_str += '<option value="Surianeun">Surianeun</option>';
+    Kel_Desa_options_str += '<option value="Surya Bahari">Surya Bahari</option>';
+    Kel_Desa_options_str += '<option value="Susukan">Susukan</option>';
+    Kel_Desa_options_str += '<option value="Suwakan">Suwakan</option>';
+    Kel_Desa_options_str += '<option value="Taban">Taban</option>';
+    Kel_Desa_options_str += '<option value="Tajur">Tajur</option>';
+    Kel_Desa_options_str += '<option value="Taktakan">Taktakan</option>';
+    Kel_Desa_options_str += '<option value="Talaga">Talaga</option>';
+    Kel_Desa_options_str += '<option value="Talaga Sari">Talaga Sari</option>';
+    Kel_Desa_options_str += '<option value="Talagahiang">Talagahiang</option>';
+    Kel_Desa_options_str += '<option value="Talagasari">Talagasari</option>';
+    Kel_Desa_options_str += '<option value="Talok">Talok</option>';
+    Kel_Desa_options_str += '<option value="Taman Jaya">Taman Jaya</option>';
+    Kel_Desa_options_str += '<option value="Tamanbaru">Tamanbaru</option>';
+    Kel_Desa_options_str += '<option value="Tamanjaya">Tamanjaya</option>';
+    Kel_Desa_options_str += '<option value="Tamansari">Tamansari</option>';
+    Kel_Desa_options_str += '<option value="Tambak">Tambak</option>';
+    Kel_Desa_options_str += '<option value="Tambakbaya">Tambakbaya</option>';
+    Kel_Desa_options_str += '<option value="Tambiluk">Tambiluk</option>';
+    Kel_Desa_options_str += '<option value="Tamiang">Tamiang</option>';
+    Kel_Desa_options_str += '<option value="Tanagara">Tanagara</option>';
+    Kel_Desa_options_str += '<option value="Tanah Merah">Tanah Merah</option>';
+    Kel_Desa_options_str += '<option value="Tanah Tinggi">Tanah Tinggi</option>';
+    Kel_Desa_options_str += '<option value="Tanara">Tanara</option>';
+    Kel_Desa_options_str += '<option value="Tangkilsari">Tangkilsari</option>';
+    Kel_Desa_options_str += '<option value="Tanjakan">Tanjakan</option>';
+    Kel_Desa_options_str += '<option value="Tanjakan Mekar">Tanjakan Mekar</option>';
+    Kel_Desa_options_str += '<option value="Tanjung Anom">Tanjung Anom</option>';
+    Kel_Desa_options_str += '<option value="Tanjung Burung">Tanjung Burung</option>';
+    Kel_Desa_options_str += '<option value="Tanjung Pasir">Tanjung Pasir</option>';
+    Kel_Desa_options_str += '<option value="Tanjung Sari">Tanjung Sari</option>';
+    Kel_Desa_options_str += '<option value="Tanjungan">Tanjungan</option>';
+    Kel_Desa_options_str += '<option value="Tanjungjaya">Tanjungjaya</option>';
+    Kel_Desa_options_str += '<option value="Tanjungmanis">Tanjungmanis</option>';
+    Kel_Desa_options_str += '<option value="Tanjungsari">Tanjungsari</option>';
+    Kel_Desa_options_str += '<option value="Tanjungsari Indah">Tanjungsari Indah</option>';
+    Kel_Desa_options_str += '<option value="Tanjungwangi">Tanjungwangi</option>';
+    Kel_Desa_options_str += '<option value="Tapos">Tapos</option>';
+    Kel_Desa_options_str += '<option value="Tarumanagara">Tarumanagara</option>';
+    Kel_Desa_options_str += '<option value="Tegal">Tegal</option>';
+    Kel_Desa_options_str += '<option value="Tegal Angus">Tegal Angus</option>';
+    Kel_Desa_options_str += '<option value="Tegal Bunder">Tegal Bunder</option>';
+    Kel_Desa_options_str += '<option value="Tegal Kunir Kidul">Tegal Kunir Kidul</option>';
+    Kel_Desa_options_str += '<option value="Tegal Kunir Lor">Tegal Kunir Lor</option>';
+    Kel_Desa_options_str += '<option value="Tegalmaja">Tegalmaja</option>';
+    Kel_Desa_options_str += '<option value="Tegalongok">Tegalongok</option>';
+    Kel_Desa_options_str += '<option value="Tegalpapak">Tegalpapak</option>';
+    Kel_Desa_options_str += '<option value="Tegalratu">Tegalratu</option>';
+    Kel_Desa_options_str += '<option value="Tegalsari">Tegalsari</option>';
+    Kel_Desa_options_str += '<option value="Tegalwangi">Tegalwangi</option>';
+    Kel_Desa_options_str += '<option value="Tejamari">Tejamari</option>';
+    Kel_Desa_options_str += '<option value="Telaga Luhur">Telaga Luhur</option>';
+    Kel_Desa_options_str += '<option value="Teluk">Teluk</option>';
+    Kel_Desa_options_str += '<option value="Teluk Naga">Teluk Naga</option>';
+    Kel_Desa_options_str += '<option value="Teluk Terate">Teluk Terate</option>';
+    Kel_Desa_options_str += '<option value="Teluklada">Teluklada</option>';
+    Kel_Desa_options_str += '<option value="Tembong">Tembong</option>';
+    Kel_Desa_options_str += '<option value="Tengkurak">Tengkurak</option>';
+    Kel_Desa_options_str += '<option value="Tenjo Ayu">Tenjo Ayu</option>';
+    Kel_Desa_options_str += '<option value="Tenjolahang">Tenjolahang</option>';
+    Kel_Desa_options_str += '<option value="Teras">Teras</option>';
+    Kel_Desa_options_str += '<option value="Terasbendung">Terasbendung</option>';
+    Kel_Desa_options_str += '<option value="Terate">Terate</option>';
+    Kel_Desa_options_str += '<option value="Teritih">Teritih</option>';
+    Kel_Desa_options_str += '<option value="Terondol">Terondol</option>';
+    Kel_Desa_options_str += '<option value="Terumbu">Terumbu</option>';
+    Kel_Desa_options_str += '<option value="Tigaraksa">Tigaraksa</option>';
+    Kel_Desa_options_str += '<option value="Tinggar">Tinggar</option>';
+    Kel_Desa_options_str += '<option value="Tiparraya">Tiparraya</option>';
+    Kel_Desa_options_str += '<option value="Tirem">Tirem</option>';
+    Kel_Desa_options_str += '<option value="Tirtayasa">Tirtayasa</option>';
+    Kel_Desa_options_str += '<option value="Tobat">Tobat</option>';
+    Kel_Desa_options_str += '<option value="Tonjong">Tonjong</option>';
+    Kel_Desa_options_str += '<option value="Toyomerto">Toyomerto</option>';
+    Kel_Desa_options_str += '<option value="Tugu">Tugu</option>';
+    Kel_Desa_options_str += '<option value="Tunggaljaya">Tunggaljaya</option>';
+    Kel_Desa_options_str += '<option value="Tunjung Teja">Tunjung Teja</option>';
+    Kel_Desa_options_str += '<option value="Turus">Turus</option>';
+    Kel_Desa_options_str += '<option value="Ujungjaya">Ujungjaya</option>';
+    Kel_Desa_options_str += '<option value="Ujungtebu">Ujungtebu</option>';
+    Kel_Desa_options_str += '<option value="Ukirsari">Ukirsari</option>';
+    Kel_Desa_options_str += '<option value="Umbul Tanjung">Umbul Tanjung</option>';
+    Kel_Desa_options_str += '<option value="Umbul Tengah">Umbul Tengah</option>';
+    Kel_Desa_options_str += '<option value="Umbulan">Umbulan</option>';
+    Kel_Desa_options_str += '<option value="Umbuljaya">Umbuljaya</option>';
+    Kel_Desa_options_str += '<option value="Undar Andir">Undar Andir</option>';
+    Kel_Desa_options_str += '<option value="Unyur">Unyur</option>';
+    Kel_Desa_options_str += '<option value="Uwung Jaya">Uwung Jaya</option>';
+    Kel_Desa_options_str += '<option value="Walantaka">Walantaka</option>';
+    Kel_Desa_options_str += '<option value="Walikukun">Walikukun</option>';
+    Kel_Desa_options_str += '<option value="Waliwis">Waliwis</option>';
+    Kel_Desa_options_str += '<option value="Wana Kerta">Wana Kerta</option>';
+    Kel_Desa_options_str += '<option value="Wanagiri">Wanagiri</option>';
+    Kel_Desa_options_str += '<option value="Wanakarta">Wanakarta</option>';
+    Kel_Desa_options_str += '<option value="Wanasalam">Wanasalam</option>';
+    Kel_Desa_options_str += '<option value="Wanasari">Wanasari</option>';
+    Kel_Desa_options_str += '<option value="Wanayasa">Wanayasa</option>';
+    Kel_Desa_options_str += '<option value="Wangunjaya">Wangunjaya</option>';
+    Kel_Desa_options_str += '<option value="Wantisari">Wantisari</option>';
+    Kel_Desa_options_str += '<option value="Warakas">Warakas</option>';
+    Kel_Desa_options_str += '<option value="Wargasara">Wargasara</option>';
+    Kel_Desa_options_str += '<option value="Waringin">Waringin</option>';
+    Kel_Desa_options_str += '<option value="Waringinjaya">Waringinjaya</option>';
+    Kel_Desa_options_str += '<option value="Waringinkurung">Waringinkurung</option>';
+    Kel_Desa_options_str += '<option value="Warnasari">Warnasari</option>';
+    Kel_Desa_options_str += '<option value="Warung Jaud">Warung Jaud</option>';
+    Kel_Desa_options_str += '<option value="Warungbanten">Warungbanten</option>';
+    Kel_Desa_options_str += '<option value="Warunggunung">Warunggunung</option>';
+    Kel_Desa_options_str += '<option value="Weru">Weru</option>';
+    Kel_Desa_options_str += '<option value="Winong">Winong</option>';
+    Kel_Desa_options_str += '<option value="Wirana">Wirana</option>';
+    Kel_Desa_options_str += '<option value="Wirasinga">Wirasinga</option>';
+    sel_Kel_Desa.innerHTML = Kel_Desa_options_str;
+    div_Kel_Desa.appendChild(sel_Kel_Desa);
+    var lab_Kel_Desa = document.createElement('div');
+    lab_Kel_Desa.innerHTML = 'Kel_Desa';
+    lab_Kel_Desa.className = 'filterlabel';
+    div_Kel_Desa.appendChild(lab_Kel_Desa);
+    var reset_Kel_Desa = document.createElement('div');
+    reset_Kel_Desa.innerHTML = 'clear filter';
+    reset_Kel_Desa.className = 'filterlabel';
+    reset_Kel_Desa.onclick = function () {
+      var options = document.getElementById("sel_Kel_Desa").options;
+      for (var i = 0; i < options.length; i++) {
+        options[i].selected = false;
+      }
+      filterFunc();
+    };
+    div_Kel_Desa.appendChild(reset_Kel_Desa);
+
+    // additional javascript functions
+    // additional javascript functions ends here
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
